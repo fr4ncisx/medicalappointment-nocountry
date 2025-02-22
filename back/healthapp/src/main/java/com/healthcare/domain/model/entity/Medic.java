@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 public class Medic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String name;
     @Column(name = "last_name")
     private String lastName;

@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     @Column(name = "appointment_date")
     private LocalDateTime appointmentDate;
     @Column(name = "visit_reason")

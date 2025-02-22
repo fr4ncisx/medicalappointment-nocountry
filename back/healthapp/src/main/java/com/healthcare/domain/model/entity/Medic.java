@@ -33,6 +33,10 @@ public class Medic {
     private Integer documentId;
     private String email;
     @Enumerated(EnumType.STRING)
+    private Gender gender;
+    private String state;
+    private String description;
+    @Enumerated(EnumType.STRING)
     private Speciality speciality;
     @OneToMany(mappedBy = "medic", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Appointment> appointment;

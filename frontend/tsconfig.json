@@ -6,6 +6,7 @@
       "@components/*": ["src/components/*"],
       "@ui/*": ["src/ui/*"],
       "@utils/*": ["src/utils/*"],
+      "@tipos/*": ["src/types/*"]
     },
     "moduleResolution": "node",
     "jsx": "react-jsx",

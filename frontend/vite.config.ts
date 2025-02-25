@@ -11,6 +11,7 @@ export default defineConfig({
       '@components/*': "/src/components/*",
       '@ui/*': "/src/ui/*",
       '@utils/*': "/src/utils/*",
+      '@tipos/*': "src/types/*"
     },
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
   }

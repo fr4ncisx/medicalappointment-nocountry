@@ -1,7 +1,11 @@
 import { AppRouter } from '@components/AppRouter';
 import { createRoot } from 'react-dom/client';
 import "./index.css";
+import { ThemeProvider } from '@mui/material';
+import { theme } from '@ui/muiOverrideTheme';
 
 createRoot(document.getElementById('root')!).render(
-  <AppRouter />
+  <ThemeProvider theme={theme}>
+    <AppRouter />
+  </ThemeProvider>
 )

@@ -1,5 +1,6 @@
 package com.healthcare.domain.model.entity;
 
+import com.healthcare.domain.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,10 +25,4 @@ public class User {
     private Medic medic;
     @OneToOne(mappedBy = "user")
     private Patient patient;
-}
-
-enum Role {
-    ADMIN,
-    MEDICO,
-    PACIENTE
 }

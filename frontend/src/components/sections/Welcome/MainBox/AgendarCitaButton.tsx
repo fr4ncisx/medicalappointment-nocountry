@@ -2,7 +2,7 @@ import { Typography } from "@mui/material";
 import { useModalStore } from "@store/modal.store";
 import { CustomButton } from "@ui/CustomButton/CustomButton";
 
-export const LoginButton = () => {
+export const AgendarCitaButton = () => {
     const setModalData = useModalStore((state) => state.setModalData);
     const handleOpenModal = () => {
         setModalData({

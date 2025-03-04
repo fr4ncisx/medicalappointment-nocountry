@@ -16,7 +16,8 @@ const modalApi: StateCreator<ModalStoreType> = (set) => ({
     modalData: {
         showModal: false,
         title: "",
-        operation: "menu"
+        operation: "menu",
+        redirect: null
     },
     setModalData: (state) => {
         set(() => ({

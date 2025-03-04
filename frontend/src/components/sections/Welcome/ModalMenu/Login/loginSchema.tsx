@@ -1,3 +1,8 @@
+export interface FormData {
+    username: string | undefined;
+    password: string | undefined;
+}
+
 export const loginSchema = {
     "type": "object",
     "required": [

@@ -1,16 +1,10 @@
 import { Typography } from "@mui/material";
 import { CustomButton } from "@ui/CustomButton/CustomButton";
 import { Form } from "@ui/Form";
-import { CSSProperties, FormEvent, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router";
 import { loginSchema, loginUiSchema } from "./loginSchema";
-
-const FormStyle: CSSProperties = {
-    display: "flex",
-    flexDirection: "column",
-    gap: "2rem",
-    width: "300px",
-}
+import { FormStyle } from "./LoginStyles";
 
 interface FormData {
     username: string | undefined;
@@ -23,7 +17,7 @@ export default function Login() {
 
     const handleChange = ({ data, errors }: { data: any, errors: any }) => {
         console.log(data, errors);
-        if(!errors) setData(data);
+        if (!errors) setData(data);
     }
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {

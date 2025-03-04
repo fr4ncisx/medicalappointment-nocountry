@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { Layout } from "./layout/Layout";
 import { Welcome } from "./sections/Welcome/Welcome";
 import { MedicosDisponiblesSection } from "./sections/MedicosDisponibles/MedicosDisponiblesSection";
+import { AgendaTuCitaSection } from "./sections/AgendaTuCita/AgendaTuCitaSection";
 import { PacienteGuard } from "@routes/PacienteGuard";
 import { AdminGuard } from "@routes/AdminGuard";
 import { MedicoGuard } from "@routes/MedicoGuard";
@@ -26,6 +27,7 @@ export const AppRouter = () => {
                 <Route element={<Layout />}>
                     <Route path="*" element={<>ERROR 404: page not found</>} />
                     <Route path="/medicos-disponibles" element={<MedicosDisponiblesSection />} />
+                    <Route path="/agenda-tu-cita" element={<AgendaTuCitaSection />} />
                     <Route path="/" element={<Welcome />} />
                     <Route element={<PacienteGuard />}>
                         <Route path="/paciente/dashboard" element={<>Dashboard</>} />

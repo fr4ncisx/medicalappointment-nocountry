@@ -2,9 +2,24 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { Layout } from "./layout/Layout";
 import { Welcome } from "./sections/Welcome/Welcome";
 import { MedicosDisponiblesSection } from "./sections/MedicosDisponibles/MedicosDisponiblesSection";
-import { AdminGuard, PacienteGuard, MedicoGuard } from "@routes";
+import { PacienteGuard } from "@routes/PacienteGuard";
+import { AdminGuard } from "@routes/AdminGuard";
+import { MedicoGuard } from "@routes/MedicoGuard";
+import { useEffect } from "react";
+import { useUserStore } from "@store/user.store";
+import { Roles } from "@tipos/store";
 
 export const AppRouter = () => {
+    const setUserData = useUserStore(state => state.setUserData);
+    useEffect(() => {
+        setUserData({
+            id: "69",
+            name: "User Unknow",
+            role: Roles.PACIENTE
+        });
+        localStorage.setItem("token","123123123asdasdasdasdasdasd");
+    }, []);
+
     return (
         <BrowserRouter>
             <Routes>
@@ -19,7 +34,7 @@ export const AppRouter = () => {
                         <Route path="/paciente/historial-citas" element={<>Historial Citas</>} />
                     </Route>
                     <Route element={<AdminGuard />}>
-                        <Route path="/adminO/dashboard" element={<>Dashboard</>} />
+                        <Route path="/admin/dashboard" element={<>Dashboard</>} />
                     </Route>
                     <Route element={<MedicoGuard />}>
                         <Route path="/medico/dashboard" element={<>Dashboard</>} />

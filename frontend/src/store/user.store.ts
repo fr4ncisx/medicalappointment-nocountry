@@ -11,6 +11,7 @@ interface Actions {
     hasRole: (role: Roles) => boolean,
     setUserData: (data: UserData) => void,
     saveToken: (token: string) => void,
+    getUserDashboardURL: () => string,
 }
 
 type UserStoreType = UserStoreState & Actions;
@@ -31,6 +32,22 @@ const userApi: StateCreator<UserStoreType> =
             set({
                 userData: { ...data }
             });
+        },
+        getUserDashboardURL: () => {
+            const userData = get().userData;
+            if (userData) {
+                switch (userData.role) {
+                    case Roles.ADMIN:
+                        return "/admin/dashboard";
+
+                    case Roles.MEDICO:
+                        return "/medico/dashboard"
+
+                    default:
+                        return "/paciente/dashboard"
+                }
+            }
+            return "/";
         }
     });
 

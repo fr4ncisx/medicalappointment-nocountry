@@ -24,6 +24,7 @@ export const ModalContentStyle: ObjectStyles = {
         justifyContent: "center"
     },
     title: {
+        marginTop: "1rem",
         color: "#185D3B",
         fontSize: "35px",
     },

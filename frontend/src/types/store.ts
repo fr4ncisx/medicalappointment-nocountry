@@ -5,3 +5,16 @@ export interface ModalData {
     showModal: boolean,
     operation: ModalOperation
 }
+
+
+export enum Roles {
+    ADMIN,
+    PACIENTE,
+    MEDICO
+}
+
+export interface UserData {
+    id: string;
+    name: string;
+    role: Roles
+}

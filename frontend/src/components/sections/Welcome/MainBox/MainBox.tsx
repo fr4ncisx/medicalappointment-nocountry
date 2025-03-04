@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { LoginButton } from "./LoginButton";
+import { AgendarCitaButton } from "./AgendarCitaButton";
 import { MainBoxStyles } from "./MainBoxStyles";
 
 export const MainBox = () => {
@@ -16,7 +16,7 @@ export const MainBox = () => {
                         Tu lugar para pedir un turno
                     </Typography>
                 </Box>
-                <LoginButton />
+                <AgendarCitaButton />
             </Box>
         </Box>
     );

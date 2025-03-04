@@ -7,7 +7,8 @@
       "@ui/*": ["src/ui/*"],
       "@utils/*": ["src/utils/*"],
       "@tipos/*": ["src/types/*"],
-      "@store/*": ["src/store/*"]
+      "@store/*": ["src/store/*"],
+      "@routes/*": ["src/routes/*"],
     },
     "moduleResolution": "node",
     "jsx": "react-jsx",
@@ -19,10 +20,8 @@
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

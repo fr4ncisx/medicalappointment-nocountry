@@ -13,7 +13,7 @@ export default defineConfig({
       '@utils/*': "/src/utils/*",
       '@tipos/*': "src/types/*",
       "@store/*": "src/store/*",
-      "@routes": "src/routes",
+      "@routes/*": "src/routes/*",
     },
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
   }

@@ -28,7 +28,7 @@ export default function Login() {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        navigate("/agenda-cita");
+        navigate("/agenda-tu-cita");
     }
 
     return (

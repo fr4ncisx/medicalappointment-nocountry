@@ -1,7 +1,14 @@
 package com.healthcare.domain.model.enums;
 
-public enum Role {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority{
     ADMIN,
     MEDICO,
-    PACIENTE
+    PACIENTE;
+
+    @Override
+    public String getAuthority() {
+        return "ROLE_" + toString();
+    }
 }

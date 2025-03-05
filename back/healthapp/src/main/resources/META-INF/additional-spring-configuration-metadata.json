@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "jwt.secret.key",
+    "type": "String",
+    "description": "Generated 256 bit hexadecimal key'"
+  },
+  {
+    "name": "jwt.expiration",
+    "type": "Integer",
+    "description": "Token expiration time, if not present default value will be 60 minutes"
+  },
+  {
+    "name": "jwt.issuer",
+    "type": "String",
+    "description": "The issuer of the JWT"
+  }
+]}

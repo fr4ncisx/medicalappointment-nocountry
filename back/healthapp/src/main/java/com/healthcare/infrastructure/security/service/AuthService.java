@@ -8,9 +8,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.auth0.jwt.exceptions.AlgorithmMismatchException;
+import com.auth0.jwt.exceptions.IncorrectClaimException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.MissingClaimException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.healthcare.domain.repository.UserRepository;
 import com.healthcare.infrastructure.dto.request.RequestLoginDTO;
 import com.healthcare.infrastructure.dto.request.UserAuthenticated;
+import com.healthcare.infrastructure.dto.response.ResponseTokenDTO;
 import com.healthcare.infrastructure.security.utils.JwtUtils;
 
 @Service
@@ -34,6 +41,29 @@ public class AuthService implements UserDetailsService {
     }
 
     /**
+     * 
+     * @param token JWT token after login
+     * @throws UsernameNotFoundException      if user was not found in database
+     * @throws IllegalArgumentException       if user is null
+     * @throws AlgorithmMismatchException     if the algorithm stated in the token's
+     *                                        header is not equal to
+     *                                        the one defined in the
+     *                                        {@link JWTVerifier}.
+     * @throws SignatureVerificationException if the signature is invalid.
+     * @throws TokenExpiredException          if the token has expired.
+     * @throws MissingClaimException          if a claim to be verified is missing.
+     * @throws IncorrectClaimException        if a claim contained a different value
+     *                                        than the expected one.
+     * @throws JWTVerificationException
+     * 
+     */
+    public void validateUserToken(String token) {
+        var validToken = jwtUtils.verifyToken(token);
+        var userDetails = loadUserByUsername(validToken.getSubject());
+        jwtUtils.loadSecurityContext(userDetails);
+    }
+
+    /**
      * <p>
      * This method checks step by step calling the repository to retrieve the user
      * object
@@ -52,8 +82,8 @@ public class AuthService implements UserDetailsService {
     public ResponseEntity<?> loginUser(RequestLoginDTO login) {
         UserAuthenticated userDetails = (UserAuthenticated) loadUserByUsername(login.email());
         jwtUtils.passwordMatches(login, userDetails);
-        jwtUtils.loadContext(userDetails);
-        String createdToken = jwtUtils.generateToken(userDetails);
-        return ResponseEntity.ok(createdToken);
+        jwtUtils.loadSecurityContext(userDetails);
+        String createdToken = jwtUtils.createToken(userDetails);
+        return ResponseEntity.ok(new ResponseTokenDTO(createdToken));
     }
 }

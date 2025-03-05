@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.healthcare.infrastructure.dto.request.RequestLoginDTO;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -17,7 +19,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> loggedIn(@RequestBody RequestLoginDTO login){
+    public ResponseEntity<?> loggedIn(@RequestBody @Valid RequestLoginDTO login){
         return authService.loginUser(login);
     }
 

@@ -27,13 +27,13 @@ export const AppRouter = () => {
                 <Route element={<Layout />}>
                     <Route path="*" element={<>ERROR 404: page not found</>} />
                     <Route path="/medicos-disponibles" element={<MedicosDisponiblesSection />} />
-                    <Route path="/agenda-tu-cita" element={<AgendaTuCitaSection />} />
                     <Route path="/" element={<Welcome />} />
                     <Route element={<PacienteGuard />}>
                         <Route path="/paciente/dashboard" element={<>Dashboard</>} />
                         <Route path="/paciente/dashboard/settings" element={<>Settings</>} />
                         <Route path="/paciente/datos-diagnostico" element={<>Datos Diagnostico</>} />
                         <Route path="/paciente/historial-citas" element={<>Historial Citas</>} />
+                        <Route path="/paciente/agendar-cita" element={<AgendaTuCitaSection />} />
                     </Route>
                     <Route element={<AdminGuard />}>
                         <Route path="/admin/dashboard" element={<>Dashboard</>} />

@@ -11,7 +11,7 @@ export default function Menu() {
             title: "Iniciar Sesión",
             operation: "login",
             showModal: true,
-            redirect: "/agendar-cita"
+            redirect: "/paciente/agendar-cita"
         });
     };
     const handleClickSignUp = () => {
@@ -19,7 +19,7 @@ export default function Menu() {
             title: "Registrarse",
             operation: "sign up",
             showModal: true,
-            redirect: "/agendar-cita"
+            redirect: "/paciente/agendar-cita"
         })
     };
 

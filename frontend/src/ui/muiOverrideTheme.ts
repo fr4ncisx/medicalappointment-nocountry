@@ -13,7 +13,19 @@ export const theme = createTheme({
     MuiTypography: {
       defaultProps: {
         fontFamily: "Inria Sans",
-        fontWeight: 400
+        fontWeight: 400,
+        variantMapping: {
+          h1: 'h2',
+          h2: 'h2',
+          h3: 'h2',
+          h4: 'h2',
+          h5: 'h2',
+          h6: 'h2',
+          subtitle1: 'h2',
+          subtitle2: 'h2',
+          body1: 'p',
+          body2: 'span',
+        },
       }
     },
     MuiFormLabel: {

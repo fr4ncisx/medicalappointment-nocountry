@@ -2,7 +2,8 @@ export const agendaSchema = {
     "type": "object",
     "required": [
         "specialty",
-        "doctor"
+        "doctor",
+        "time"
     ],
     "properties": {
         "specialty": {
@@ -51,8 +52,6 @@ export const agendaSchema = {
         },
         "time": {
             "type": "string",
-            "format": "time",
-            "description": "schema-based time picker",
             "errorMessage": {
                 "format": "El formato de la hora no es válido."
             }
@@ -81,8 +80,7 @@ export const agendaUiSchema = {
             "scope": "#/properties/time",
             "label": "Horario",
             "options": {
-                "timeFormat": "HH:mm",
-                "timeSaveFormat": "HH:mm",
+                "format": "time"
             }
         },
     ]

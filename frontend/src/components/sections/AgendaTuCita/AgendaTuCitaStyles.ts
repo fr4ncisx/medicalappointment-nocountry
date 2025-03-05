@@ -1,6 +1,25 @@
-import { SxProps } from "@mui/material";
+import { ObjectStyles } from "@tipos/component";
+import { CSSProperties } from "react";
 
-export const AgendaTuCitaStyles: Record<string, SxProps> = {
+export const AgendaCSStyles: Record<string, CSSProperties> = {
+    formCalendar: {
+        display: "flex",
+    },
+    svg: {
+        height: "26px",
+        width: "26px",
+        textAlign: "center",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: 1.5,
+    },
+    path: {
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
+    }
+}
+
+export const AgendaTuCitaStyles: ObjectStyles = {
     container: {
         display: "flex",
         flexDirection: "column",

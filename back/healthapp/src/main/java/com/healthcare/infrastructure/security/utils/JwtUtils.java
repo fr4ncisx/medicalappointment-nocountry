@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import com.auth0.jwt.JWT;
@@ -33,7 +34,7 @@ public class JwtUtils {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public <U extends UserAuthenticated> String generateToken(U user) {
+    public <U extends UserAuthenticated> String createToken(U user) {
         return JWT.create()
                 .withIssuer(appIssuer)
                 .withSubject(user.getEmail())
@@ -44,11 +45,27 @@ public class JwtUtils {
                 .sign(getAlgorithm());
     }
 
-    public DecodedJWT validateToken(String token) {
+    public DecodedJWT verifyToken(String token) {
         return JWT.require(getAlgorithm())
                 .withIssuer(appIssuer)
                 .build()
                 .verify(token);
+    }
+
+    public <U extends UserAuthenticated> void passwordMatches(RequestLoginDTO requestFromLogin, U userFromRepository) {
+        if (!passwordEncoder.matches(requestFromLogin.password(), userFromRepository.getPassword())) {
+            // falta modificar la excepcion en el globalexceptionhandler
+            throw new BadCredentialsException("Contraseña incorrecta");
+        }
+    }
+
+    public <U extends UserDetails> void loadSecurityContext(U user) {
+        if (user == null) {
+            throw new IllegalArgumentException();
+        }
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+        securityContext.setAuthentication(auth);
     }
 
     private String generateRandomUUID() {
@@ -64,20 +81,5 @@ public class JwtUtils {
 
     private Algorithm getAlgorithm() {
         return Algorithm.HMAC512(secretKey);
-    }
-
-    public <U extends UserAuthenticated> void passwordMatches(RequestLoginDTO requestFromLogin, U userFromRepository) {
-        if (!passwordEncoder.matches(requestFromLogin.password(), userFromRepository.getPassword())) {
-            throw new BadCredentialsException("Contraseña incorrecta");
-        }
-    }
-
-    public void loadContext(UserAuthenticated user) {
-        if (user == null) {
-            throw new IllegalArgumentException();
-        }
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-        securityContext.setAuthentication(auth);
     }
 }

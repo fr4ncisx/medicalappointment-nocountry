@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,7 +20,7 @@ public class Patient {
     private String firstName;
     private String lastName;
     @Column(unique = true)
-    private Integer document;
+    private String document;
     private LocalDate birthDate;
     @Enumerated(EnumType.STRING)
     private Gender gender;

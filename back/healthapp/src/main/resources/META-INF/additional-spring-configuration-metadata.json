@@ -13,5 +13,10 @@
     "name": "jwt.issuer",
     "type": "String",
     "description": "The issuer of the JWT"
+  },
+  {
+    "name": "cloudinary.url",
+    "type": "String",
+    "description": "Cloudinary API URL"
   }
 ]}

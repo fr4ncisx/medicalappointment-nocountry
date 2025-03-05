@@ -12,18 +12,20 @@ interface FormData {
     time: string | null;
 };
 
+const FormInitialData = {
+    doctor: null,
+    specialty: null,
+};
+
 export const AgendaTuCitaSection = () => {
-    const [data, setData] = useState<FormData | {}>({
-        doctor: null,
-        specialty: null,
-    });
+    const [data, setData] = useState<FormData | {}>(FormInitialData);
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(false);
     const [date, setDate] = useState<string>("");
 
     const handleChange = ({ data, errors }: { data: any, errors: any }) => {
         setData(data);
-        if(errors.length !== 0) {
+        if (errors.length !== 0) {
             setError(true);
         } else {
             setError(false);
@@ -32,20 +34,23 @@ export const AgendaTuCitaSection = () => {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setLoading(true);
         console.info({ data, date });
-        if (!data && !date) {
+        if (!data || date === "") {
             setError(true);
         } else {
+            setLoading(true);
             setError(false);
-            setLoading(false);
             console.info("La cita se ha agendado:", { data, date });
+            setLoading(false);
         }
     }
 
     const handleCalendarChange = (event: Event) => {
         const target = event.target as any;
         setDate(target.value);
+        if(error) {
+            setError(false);
+        }
     }
 
     return (
@@ -57,7 +62,7 @@ export const AgendaTuCitaSection = () => {
                     <Form schema={agendaSchema} uiSchema={agendaUiSchema} data={data} onChange={handleChange} />
 
                     {
-                        error
+                        error && data !== FormInitialData
                             ? (
                                 <Typography variant="body2" textAlign="center" sx={{ color: "#e85c5c", fontWeight: "bold" }}>
                                     Por favor, asegurese de completar todos los campos y seleccionar una fecha

@@ -39,7 +39,7 @@ export const AgendaTuCitaStyles: ObjectStyles = {
     form: {
         minWidth: "300px",
         maxWidth: "300px",
-        padding: "20px",
+        padding: "15px",
         display: 'flex',
         flexDirection: 'column',
         borderRadius: "10px",
@@ -58,7 +58,7 @@ export const AgendaTuCitaStyles: ObjectStyles = {
             borderRadius: "10px",
         },
         "calendar-date::part(container)": {
-            padding: "10px 10px 5px",
+            padding: "15px 15px 5px",
             border: "1px solid #cdcdcd",
             borderRadius: "10px",
             fontSize: "1.2rem",

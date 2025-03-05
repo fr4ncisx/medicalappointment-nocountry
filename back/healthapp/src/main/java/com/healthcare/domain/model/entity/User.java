@@ -25,15 +25,5 @@ public class User {
     private Medic medic;
     @OneToOne(mappedBy = "user")
     private Patient patient;
-    
-    /*@Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + this.role.toString()));
-    }
-
-    @Override
-    public String getUsername() {
-        return null;
-    }*/
 
 }

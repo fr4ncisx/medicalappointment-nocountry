@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface MedicRepository extends JpaRepository<Medic, Long> {
-    Optional<Medic> findByDocumentId (Integer documentId);
-    Optional<Medic> findByEmail(String email);
+    Optional<Medic> findByDocumentId (String documentId);
 }

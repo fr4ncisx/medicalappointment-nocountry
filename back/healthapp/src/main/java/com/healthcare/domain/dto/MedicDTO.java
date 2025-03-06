@@ -1,18 +1,25 @@
 package com.healthcare.domain.dto;
 
-import com.healthcare.domain.model.entity.Medic;
+import com.healthcare.domain.model.enums.Gender;
+import com.healthcare.domain.model.enums.Speciality;
 
-public record MedicDTO(Long id, String name, String lastName, String email, String speciality, String description) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    public static MedicDTO fromEntity(Medic medic) {
-        return new MedicDTO(
-                medic.getId(),
-                medic.getName(),
-                medic.getLastName(),
-                medic.getEmail(),
-                medic.getSpeciality().name(),
-                medic.getDescription()
-        );
-    }
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class MedicDTO{
+    @NotNull @NotBlank private String name;
+    @NotNull @NotBlank private String lastname;
+    @NotNull @NotBlank private String description;
+    @NotNull @NotBlank private String state;
+    @NotNull @NotBlank private String documentId;
+    @NotNull private Gender gender;
+    @NotNull private Speciality speciality;
+    @NotNull @NotBlank private String phone;
 
 }

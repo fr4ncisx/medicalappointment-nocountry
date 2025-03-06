@@ -2,6 +2,7 @@ package com.healthcare.domain.model.entity;
 
 import java.util.List;
 
+import com.healthcare.domain.dto.MedicDTO;
 import com.healthcare.domain.model.enums.Gender;
 import com.healthcare.domain.model.enums.Speciality;
 import jakarta.persistence.CascadeType;
@@ -31,19 +32,30 @@ public class Medic {
     private String name;
     @Column(name = "last_name")
     private String lastName;
+    private String description;
+    private String state;
     @Column(name = "dni")
-    private Integer documentId;
-    private String email;
+    private String documentId;
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    private String state;
-    private String description;
     @Enumerated(EnumType.STRING)
     private Speciality speciality;
+    private String phone;
     @OneToMany(mappedBy = "medic", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Appointment> appointment;
     @OneToOne @JoinColumn(name = "user_id")
     private User user;
     @OneToOne @JoinColumn(name = "image_id")
     private Image image;
+    
+    public Medic(MedicDTO medicDTO) {
+        this.name = medicDTO.getName();
+        this.lastName = medicDTO.getLastname();
+        this.description = medicDTO.getDescription();
+        this.state = medicDTO.getState();
+        this.documentId = medicDTO.getDocumentId();
+        this.gender = medicDTO.getGender();
+        this.speciality = medicDTO.getSpeciality();
+        this.phone = medicDTO.getPhone();
+    }
 }

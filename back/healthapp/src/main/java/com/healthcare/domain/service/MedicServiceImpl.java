@@ -1,23 +1,28 @@
 package com.healthcare.domain.service;
 
 import com.healthcare.domain.dto.MedicDTO;
+import com.healthcare.domain.exceptions.MedicNotFoundException;
 import com.healthcare.domain.exceptions.NotFoundInDatabaseException;
 import com.healthcare.domain.model.entity.Medic;
 import com.healthcare.domain.repository.MedicRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Service
 public class MedicServiceImpl implements IMedicService {
 
-    @Autowired
-    private MedicRepository medicRepository;
+
+    private final MedicRepository medicRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public ResponseEntity<?> getAllMedics(String speciality, String gender, String state) {
@@ -40,7 +45,7 @@ public class MedicServiceImpl implements IMedicService {
         }
 
         List<MedicDTO> medicDTOS = medics.stream()
-                .map(MedicDTO::fromEntity)
+                .map(medicEntity -> modelMapper.map(medicEntity, MedicDTO.class))
                 .toList();
 
         if (medicDTOS.isEmpty()) {
@@ -53,25 +58,30 @@ public class MedicServiceImpl implements IMedicService {
     @Override
     public ResponseEntity<?> getMedicById(Long id) {
         Medic medic = medicRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Médico no encontrado con ID: " + id));
-        MedicDTO medicDTO = MedicDTO.fromEntity(medic);
-        return ResponseEntity.ok(Map.of("medic", medicDTO));
+                .orElseThrow(() -> new MedicNotFoundException("Médico no encontrado"));
+        MedicDTO dto = modelMapper.map(medic, MedicDTO.class);
+        return ResponseEntity.ok(Map.of("medic", dto));
     }
 
     @Override
     @Transactional
-    public ResponseEntity<?> createMedic(Medic medic) {
-        Medic savedMedic = medicRepository.save(medic);
-        return new ResponseEntity<>(Map.of(
-                "message", "Médico creado con éxito", "medic", savedMedic),
-                HttpStatus.CREATED);
+    public ResponseEntity<?> createMedic(MedicDTO medicDTO) {
+        if(medicDTO == null){
+            throw new RuntimeException("Required body");
+        }
+        Medic medic = new Medic(medicDTO);
+        medicRepository.save(medic);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
+                "message", "Médico creado con éxito",
+                "medic", medicDTO
+        ));
     }
 
     @Override
     @Transactional
     public ResponseEntity<?> deleteMedic(Long id) {
         Medic medic = medicRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Médico no encontrado con ID: " + id));
+                .orElseThrow(() -> new MedicNotFoundException("Médico no encontrado"));
         medicRepository.delete(medic);
         return ResponseEntity.ok(Map.of("message", "Médico eliminado con éxito"));
     }

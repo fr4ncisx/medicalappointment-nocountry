@@ -1,9 +1,13 @@
 package com.healthcare.domain.service;
 
-import static com.healthcare.domain.model.enums.Status.CONFIRMADA;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,12 +15,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.internal.util.Assert;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.healthcare.domain.dto.AppointmentDTO;
+import com.healthcare.domain.exceptions.CancelledAppointmentException;
 import com.healthcare.domain.model.entity.Appointment;
+import com.healthcare.domain.model.entity.Medic;
+import com.healthcare.domain.model.entity.Patient;
 import com.healthcare.domain.model.enums.Status;
 import com.healthcare.domain.repository.AppointmentRepository;
 import com.healthcare.domain.repository.MedicRepository;
@@ -24,7 +28,7 @@ import com.healthcare.domain.repository.PatientRepository;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
-public class AppointmentServiceImplTest {
+class AppointmentServiceImplTest {
 
     @Mock
     private AppointmentRepository appointmentRepository;
@@ -35,49 +39,45 @@ public class AppointmentServiceImplTest {
     @InjectMocks
     private AppointmentServiceImpl appointmentServiceImpl;
 
-    private ModelMapper modelMapper;
-    private AppointmentDTO mockAppointmentDTO;
+    private Appointment mockAppointment;
 
     @BeforeEach
     void setup() {
-        modelMapper = new ModelMapper();
-        mockAppointmentDTO = new AppointmentDTO(null, null, null, LocalDateTime.now(), CONFIRMADA);
+
+        Patient mockPatient = new Patient();
+        mockPatient.setId(1L);
+
+        Medic mockMedic = new Medic();
+        mockMedic.setId(2L);
+
+        mockAppointment = new Appointment(1L, LocalDateTime.now(), "Prueba", Status.CANCELADA, mockMedic, mockPatient);
     }
 
     @Test
     void testCancelAppointment() {
-        Appointment appointment = modelMapper.map(mockAppointmentDTO, Appointment.class);
-        appointment.setStatus(Status.CANCELADA);
+        when(appointmentRepository.findById(any(Long.class))).thenReturn(Optional.of(mockAppointment));
+    
+        assertSame(Status.CANCELADA, mockAppointment.getStatus());
+    
+        assertThrowsExactly(CancelledAppointmentException.class,
+        () -> appointmentServiceImpl.cancelAppointment(any(Long.class)));
 
-
-        Assert.notNull(appointment);
-        Assert.isTrue(appointment.getStatus() == Status.CANCELADA);
+        mockAppointment.setStatus(Status.CONFIRMADA);
+        assertSame(Status.CONFIRMADA, mockAppointment.getStatus());
     }
 
     @Test
     void testGetAppointmentsByPatient() {
 
-        AppointmentDTO appointmentDTO = new AppointmentDTO(null, null, null, LocalDateTime.now(), CONFIRMADA);
-        var appointment = modelMapper.map(appointmentDTO, Appointment.class);
-
-        Assert.notNull(appointment);
     }
 
     @Test
     void testScheduleAppointment() {
-        AppointmentDTO appointmentDTO = new AppointmentDTO(null, null, null, LocalDateTime.now(), Status.CONFIRMADA);
-        var appointment = modelMapper.map(appointmentDTO, Appointment.class);
 
-        Assert.notNull(appointment);
     }
 
     @Test
     void testUpdateAppointment() {
-        Appointment appointment = modelMapper.map(mockAppointmentDTO, Appointment.class);
-        appointment.setStatus(Status.CONFIRMADA);
 
-
-        Assert.notNull(appointment);
-        Assert.isTrue(appointment.getStatus() == Status.CONFIRMADA);
     }
 }

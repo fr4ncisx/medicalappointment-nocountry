@@ -1,19 +1,22 @@
 package com.healthcare.infrastructure.security.service;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.auth0.jwt.exceptions.AlgorithmMismatchException;
-import com.auth0.jwt.exceptions.IncorrectClaimException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.exceptions.MissingClaimException;
-import com.auth0.jwt.exceptions.SignatureVerificationException;
-import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.healthcare.domain.repository.UserRepository;
 import com.healthcare.infrastructure.dto.request.RequestLoginDTO;
 import com.healthcare.infrastructure.dto.request.UserAuthenticated;
@@ -29,21 +32,14 @@ public class AuthService implements UserDetailsService {
     @Autowired
     private JwtUtils jwtUtils;
 
-    /**
-     * Checks whether the user exists or not, if exists it converts User to
-     * UserAuthenticated
-     */
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email)
-                .map(UserAuthenticated::new)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
-    }
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     /**
      * 
      * @param token JWT token after login
      * @throws UsernameNotFoundException      if user was not found in database
+     * @throws BadCredentialsException        Invalid password from password matches
      * @throws IllegalArgumentException       if user is null
      * @throws AlgorithmMismatchException     if the algorithm stated in the token's
      *                                        header is not equal to
@@ -57,11 +53,6 @@ public class AuthService implements UserDetailsService {
      * @throws JWTVerificationException
      * 
      */
-    public void validateUserToken(String token) {
-        var validToken = jwtUtils.verifyToken(token);
-        var userDetails = loadUserByUsername(validToken.getSubject());
-        jwtUtils.loadSecurityContext(userDetails);
-    }
 
     /**
      * <p>
@@ -80,10 +71,49 @@ public class AuthService implements UserDetailsService {
      * @throws BadCredentialsException   Password doesnt match user or is invalid
      */
     public ResponseEntity<?> loginUser(RequestLoginDTO login) {
-        UserAuthenticated userDetails = (UserAuthenticated) loadUserByUsername(login.email());
-        jwtUtils.passwordMatches(login, userDetails);
+        try {
+            UserAuthenticated userDetails = (UserAuthenticated) loadUserByUsername(login.email());
+            passwordMatches(login, userDetails);
+            loadSecurityContext(userDetails);
+            String createdToken = jwtUtils.createToken(userDetails);
+            return ResponseEntity.ok(new ResponseTokenDTO(createdToken));
+        } catch (UsernameNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", ex.getMessage()));
+        } catch (BadCredentialsException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", ex.getMessage()));
+        }
+    }
+
+    /**
+     * Checks whether the user exists or not, if exists it converts User to
+     * UserAuthenticated
+     */
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepository.findByEmail(email)
+                .map(UserAuthenticated::new)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+    }
+
+    public <U extends UserAuthenticated> void passwordMatches(RequestLoginDTO requestFromLogin, U userFromRepository) {
+        if (!passwordEncoder.matches(requestFromLogin.password(), userFromRepository.getPassword())) {
+            throw new BadCredentialsException("Contraseña incorrecta");
+        }
+    }
+
+    public void validateUser(DecodedJWT decodedJWT) {
+        UserDetails userDetails = loadUserByUsername(decodedJWT.getSubject());
         jwtUtils.loadSecurityContext(userDetails);
-        String createdToken = jwtUtils.createToken(userDetails);
-        return ResponseEntity.ok(new ResponseTokenDTO(createdToken));
+    }                
+
+    public <U extends UserDetails> void loadSecurityContext(U user) {
+        if (user == null) {
+            throw new IllegalArgumentException();
+        }
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+        securityContext.setAuthentication(auth);
     }
 }

@@ -1,6 +1,8 @@
 package com.healthcare.domain.service;
 
 import com.healthcare.domain.dto.PatientDTO;
+import com.healthcare.domain.exceptions.DuplicatedEntryEx;
+import com.healthcare.domain.exceptions.InvalidDataException;
 import com.healthcare.domain.exceptions.NotFoundInDatabaseException;
 import com.healthcare.domain.exceptions.PatientNotFoundException;
 import com.healthcare.domain.model.entity.Patient;
@@ -47,16 +49,19 @@ public class PatientServiceImpl implements IPatientService{
 
     @Override
     @Transactional
-    public ResponseEntity<?> createPatient(PatientDTO patientDTO){
-        if(patientDTO == null){
-            throw new RuntimeException("Required body");
+    public ResponseEntity<?> createPatient(PatientDTO patientDTO) {
+        if (patientDTO == null) {
+            throw new InvalidDataException("El cuerpo de la solicitud es obligatorio");
+        }
+
+        if (patientRepository.existsByDocumentId(patientDTO.getDocumentId())) {
+            throw new DuplicatedEntryEx("Paciente ya registrado");
         }
         Patient patient = new Patient(patientDTO);
         patientRepository.save(patient);
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                 "message", "Paciente creado con éxito",
-                "patient", patientDTO
-        ));
+                "patient", patientDTO));
     }
 
     @Override

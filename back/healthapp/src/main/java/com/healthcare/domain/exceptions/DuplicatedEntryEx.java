@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class DuplicateException extends RuntimeException {
+public class DuplicatedEntryEx extends RuntimeException {
     private String message;
 }

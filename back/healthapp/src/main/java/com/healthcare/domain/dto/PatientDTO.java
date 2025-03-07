@@ -18,7 +18,7 @@ public class PatientDTO {
     @NotNull @NotBlank private String firstName;
     @NotNull @NotBlank private String lastName;
     @NotNull @NotBlank private String documentId;
-    @NotNull @NotBlank private LocalDate birthDate;
+    @NotNull private LocalDate birthDate;
     @NotNull private Gender gender;
     @NotNull @NotBlank private String phone;
     @NotNull @NotBlank private String address;

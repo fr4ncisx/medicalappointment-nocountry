@@ -1,7 +1,6 @@
 package com.healthcare.domain.service;
 
 import com.healthcare.domain.dto.PatientDTO;
-import com.healthcare.domain.model.entity.Patient;
 import org.springframework.http.ResponseEntity;
 
 public interface IPatientService {

@@ -1,7 +1,6 @@
 package com.healthcare.domain.controller;
 
 import com.healthcare.domain.dto.PatientDTO;
-import com.healthcare.domain.model.entity.Patient;
 import com.healthcare.domain.service.IPatientService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

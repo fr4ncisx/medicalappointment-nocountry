@@ -5,7 +5,6 @@ import com.healthcare.domain.exceptions.NotFoundInDatabaseException;
 import com.healthcare.domain.exceptions.PatientNotFoundException;
 import com.healthcare.domain.model.entity.Patient;
 import com.healthcare.domain.repository.PatientRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;

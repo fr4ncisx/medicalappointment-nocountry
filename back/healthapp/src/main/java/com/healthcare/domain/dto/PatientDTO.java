@@ -1,7 +1,8 @@
 package com.healthcare.domain.dto;
 
+import java.time.LocalDate;
+
 import com.healthcare.domain.model.enums.Gender;
-import com.healthcare.domain.model.enums.Speciality;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -9,17 +10,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class MedicDTO{
-    @NotNull @NotBlank private String name;
-    @NotNull @NotBlank private String lastname;
-    @NotNull @NotBlank private String description;
-    @NotNull @NotBlank private String state;
-    @NotNull @NotBlank private String documentId;
-    @NotNull private Gender gender;
-    @NotNull private Speciality speciality;
-    @NotNull @NotBlank private String phone;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class PatientDTO {
+    @NotNull @NotBlank private String firstName;
+    @NotNull @NotBlank private String lastName;
+    @NotNull @NotBlank private String documentId;
+    @NotNull private LocalDate birthDate;
+    @NotNull private Gender gender;
+    @NotNull @NotBlank private String phone;
+    @NotNull @NotBlank private String address;
+    @NotNull @NotBlank private String emergencyContactInfo;
 }

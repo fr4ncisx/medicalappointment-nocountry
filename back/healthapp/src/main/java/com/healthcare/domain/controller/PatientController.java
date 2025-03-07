@@ -1,13 +1,14 @@
 package com.healthcare.domain.controller;
 
-import com.healthcare.domain.model.entity.Patient;
+import com.healthcare.domain.dto.PatientDTO;
 import com.healthcare.domain.service.IPatientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/patients")
+@RequestMapping("/api/v1/patient")
 public class PatientController {
 
     @Autowired
@@ -24,12 +25,12 @@ public class PatientController {
     }
 
     @PostMapping
-    public ResponseEntity<?> savePatient(@RequestBody Patient patient){
-        return patientService.savePatient(patient);
+    public ResponseEntity<?> createPatient(@RequestBody @Valid PatientDTO patientDTO) {
+        return patientService.createPatient(patientDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePatient(@PathVariable Long id){
+    public ResponseEntity<?> deletePatient(@PathVariable Long id) {
         return patientService.deletePatient(id);
     }
 }

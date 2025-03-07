@@ -1,13 +1,16 @@
 package com.healthcare.domain.controller;
 
-import com.healthcare.domain.model.entity.Medic;
+import com.healthcare.domain.dto.MedicDTO;
 import com.healthcare.domain.service.IMedicService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/medics")
+@RequestMapping("/api/v1/medic")
 public class MedicController {
 
     @Autowired
@@ -27,8 +30,8 @@ public class MedicController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createMedic(@RequestBody Medic medic) {
-        return medicService.createMedic(medic);
+    public ResponseEntity<?> createMedic(@RequestBody @Valid MedicDTO medicDTO) {
+        return medicService.createMedic(medicDTO);
     }
 
     @DeleteMapping("/{id}")

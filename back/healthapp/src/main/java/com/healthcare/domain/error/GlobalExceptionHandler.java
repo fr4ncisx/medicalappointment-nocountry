@@ -7,6 +7,7 @@ import com.healthcare.domain.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -69,4 +70,36 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> cancelledAppointment(CancelledAppointmentException ex) {
         return new ResponseEntity<>(Map.of("error", ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(InvalidDataException.class)
+    public ResponseEntity<?> invalidDataException(InvalidDataException ex) {
+        return new ResponseEntity<>(Map.of("error", ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DuplicatedEntryEx.class)
+    public ResponseEntity<?> duplicateException(DuplicatedEntryEx ex) {
+        return new ResponseEntity<>(Map.of("error", ex.getMessage()), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidFieldException.class)
+    public ResponseEntity<?> invalidFieldException(InvalidFieldException ex) {
+        return new ResponseEntity<>(Map.of("error", ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MedicDeletionException.class)
+    public ResponseEntity<?> medicDeleteException(MedicDeletionException ex) {
+        return new ResponseEntity<>(Map.of("error", ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> validationErrors(MethodArgumentNotValidException ex) {
+        var listOfErrors = ex.getFieldErrors().stream()
+                .map(e -> new ShowFieldErrors(e.getField(), e.getDefaultMessage()));
+        return new ResponseEntity<>(listOfErrors, HttpStatus.BAD_REQUEST);
+    }
+
+    private record ShowFieldErrors(String campo, String error) {
+    }
 }
+
+

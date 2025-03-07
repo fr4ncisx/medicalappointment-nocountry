@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
     List<Appointment> findByPatientId(Long patientId);
     Optional<Appointment> findByMedicIdAndDateTime(Long medicId, LocalDateTime dateTime);
+    boolean existsByMedicId(Long medicId);
 }

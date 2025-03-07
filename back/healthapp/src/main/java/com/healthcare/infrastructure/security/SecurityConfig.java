@@ -44,7 +44,7 @@ public class SecurityConfig {
     }
 
     private String[] medicEndpoints() {
-        return new String[] { "/api/v1/medics/**" };
+        return new String[] { "/api/v1/medic/**" };
     }
 
     private String[] patientEndpoints() {

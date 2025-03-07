@@ -8,7 +8,6 @@ import com.healthcare.domain.repository.MedicRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.modelmapper.ModelMapper;
-import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -72,12 +71,8 @@ public class MedicServiceImpl implements IMedicService {
             throw new InvalidDataException("El cuerpo de la solicitud es obligatorio");
         }
 
-        if(medicDTO.getDocumentId() == null) {
-            throw new InvalidDataException("El DocumentId no puede estar vacío");
-        }
-
         if(medicRepository.existsByDocumentId(medicDTO.getDocumentId())) {
-            throw new DuplicateException("Médico ya registrado");
+            throw new DuplicatedEntryEx("Médico ya registrado");
         }
 
         Medic medic = new Medic(medicDTO);

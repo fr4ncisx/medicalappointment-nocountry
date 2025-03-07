@@ -21,7 +21,7 @@ public class Patient {
     private String firstName;
     private String lastName;
     @Column(unique = true)
-    private String document;
+    private String documentId;
     private LocalDate birthDate;
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -42,13 +42,13 @@ public class Patient {
     private List<DiagnosticImages> diagnosticImages;
     
     public Patient(PatientDTO patientDTO) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.document = document;
-        this.birthDate = birthDate;
-        this.gender = gender;
-        this.phone = phone;
-        this.address = address;
-        this.emergencyContactInfo = emergencyContactInfo;
-    }    
+        this.firstName = patientDTO.getFirstName();
+        this.lastName = patientDTO.getLastName();
+        this.documentId = patientDTO.getDocumentId();
+        this.birthDate = patientDTO.getBirthDate();
+        this.gender = patientDTO.getGender();
+        this.phone = patientDTO.getPhone();
+        this.address = patientDTO.getAddress();
+        this.emergencyContactInfo = patientDTO.getEmergencyContactInfo();
+    }
 }

@@ -69,4 +69,24 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> cancelledAppointment(CancelledAppointmentException ex) {
         return new ResponseEntity<>(Map.of("error", ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(InvalidDataException.class)
+    public ResponseEntity<?> invalidDataException(InvalidDataException ex) {
+        return new ResponseEntity<>(Map.of("error", ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DuplicateException.class)
+    public ResponseEntity<?> duplicateException(DuplicateException ex) {
+        return new ResponseEntity<>(Map.of("error", ex.getMessage()), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(InvalidFieldException.class)
+    public ResponseEntity<?> invalidFieldException(InvalidFieldException ex) {
+        return new ResponseEntity<>(Map.of("error", ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MedicDeletionException.class)
+    public ResponseEntity<?> medicDeleteException(MedicDeletionException ex) {
+        return new ResponseEntity<>(Map.of("error", ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
 }

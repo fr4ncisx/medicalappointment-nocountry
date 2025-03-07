@@ -1,13 +1,14 @@
 package com.healthcare.domain.service;
 
 import com.healthcare.domain.dto.MedicDTO;
-import com.healthcare.domain.exceptions.MedicNotFoundException;
-import com.healthcare.domain.exceptions.NotFoundInDatabaseException;
+import com.healthcare.domain.exceptions.*;
 import com.healthcare.domain.model.entity.Medic;
+import com.healthcare.domain.repository.AppointmentRepository;
 import com.healthcare.domain.repository.MedicRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class MedicServiceImpl implements IMedicService {
 
 
     private final MedicRepository medicRepository;
+    private final AppointmentRepository appointmentRepository;
     private final ModelMapper modelMapper;
 
     @Override
@@ -67,8 +69,17 @@ public class MedicServiceImpl implements IMedicService {
     @Transactional
     public ResponseEntity<?> createMedic(MedicDTO medicDTO) {
         if(medicDTO == null){
-            throw new RuntimeException("Required body");
+            throw new InvalidDataException("El cuerpo de la solicitud es obligatorio");
         }
+
+        if(medicDTO.getDocumentId() == null) {
+            throw new InvalidDataException("El DocumentId no puede estar vacío");
+        }
+
+        if(medicRepository.existsByDocumentId(medicDTO.getDocumentId())) {
+            throw new DuplicateException("Médico ya registrado");
+        }
+
         Medic medic = new Medic(medicDTO);
         medicRepository.save(medic);
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
@@ -82,6 +93,11 @@ public class MedicServiceImpl implements IMedicService {
     public ResponseEntity<?> deleteMedic(Long id) {
         Medic medic = medicRepository.findById(id)
                 .orElseThrow(() -> new MedicNotFoundException("Médico no encontrado"));
+
+        if(appointmentRepository.existsByMedicId(id)) {
+            throw new MedicDeletionException("No se puede eliminar el Médico porque tiene citas asociadas");
+        }
+
         medicRepository.delete(medic);
         return ResponseEntity.ok(Map.of("message", "Médico eliminado con éxito"));
     }

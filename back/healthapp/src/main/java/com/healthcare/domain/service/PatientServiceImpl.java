@@ -1,8 +1,8 @@
 package com.healthcare.domain.service;
 
-import com.healthcare.domain.dto.PatientRequestDTO;
-import com.healthcare.domain.dto.PatientResponseDTO;
-import com.healthcare.domain.dto.UserRequestDTO;
+import com.healthcare.domain.dto.request.PatientRequestDTO;
+import com.healthcare.domain.dto.request.UserRequestDTO;
+import com.healthcare.domain.dto.response.PatientResponseDTO;
 import com.healthcare.domain.exceptions.DuplicatedEntryEx;
 import com.healthcare.domain.exceptions.InvalidDataException;
 import com.healthcare.domain.exceptions.NotFoundInDatabaseException;
@@ -78,18 +78,19 @@ public class PatientServiceImpl implements IPatientService{
         return ResponseEntity.ok(Map.of("message", "Paciente eliminado con éxito"));
     }
 
-    private void assertValidation(PatientRequestDTO patientDTO){
+    private void assertValidation(PatientRequestDTO patientDTO) {
         if (patientDTO == null) {
             throw new InvalidDataException("El cuerpo de la solicitud es obligatorio");
         }
         if (patientRepository.existsByDocumentId(patientDTO.getDocumentId())) {
             throw new DuplicatedEntryEx("Paciente ya registrado");
         }
-        if(userRepository.existsByEmail(patientDTO.getUser().getEmail())){
+        if (userRepository.existsByEmail(patientDTO.getUser().getEmail())) {
             throw new DuplicatedEntryEx("El correo ya esta asociado a una cuenta");
         }
     }
-    private String encodePassword(String password){
+
+    private String encodePassword(String password) {
         return passwordEncoder.encode(password);
     }
 }

@@ -1,7 +1,8 @@
 package com.healthcare.domain.service;
 
-import com.healthcare.domain.dto.PatientRequestDTO;
 import org.springframework.http.ResponseEntity;
+
+import com.healthcare.domain.dto.request.PatientRequestDTO;
 
 public interface IPatientService {
     ResponseEntity<?> getAllPatients();

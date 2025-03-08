@@ -1,6 +1,6 @@
 package com.healthcare.domain.controller;
 
-import com.healthcare.domain.dto.PatientRequestDTO;
+import com.healthcare.domain.dto.request.PatientRequestDTO;
 import com.healthcare.domain.service.IPatientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

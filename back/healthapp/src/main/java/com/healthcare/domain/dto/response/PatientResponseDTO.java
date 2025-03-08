@@ -1,8 +1,7 @@
-package com.healthcare.domain.dto;
+package com.healthcare.domain.dto.response;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.healthcare.domain.model.enums.Gender;
 
 import jakarta.validation.constraints.NotBlank;
@@ -15,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PatientRequestDTO {
+public class PatientResponseDTO {
     @NotNull @NotBlank private String firstName;
     @NotNull @NotBlank private String lastName;
     @NotNull @NotBlank private String documentId;
@@ -24,6 +23,4 @@ public class PatientRequestDTO {
     @NotNull @NotBlank private String phone;
     @NotNull @NotBlank private String address;
     @NotNull @NotBlank private String emergencyContactInfo;
-    @JsonProperty("user")
-    @NotNull private UserRequestDTO user;
 }

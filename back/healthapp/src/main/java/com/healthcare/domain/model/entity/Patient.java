@@ -1,6 +1,6 @@
 package com.healthcare.domain.model.entity;
 
-import com.healthcare.domain.dto.PatientRequestDTO;
+import com.healthcare.domain.dto.request.PatientRequestDTO;
 import com.healthcare.domain.model.enums.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

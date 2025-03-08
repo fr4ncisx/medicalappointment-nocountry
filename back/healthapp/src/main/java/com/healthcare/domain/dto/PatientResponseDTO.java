@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PatientDTO {
+public class PatientResponseDTO {
     @NotNull @NotBlank private String firstName;
     @NotNull @NotBlank private String lastName;
     @NotNull @NotBlank private String documentId;

@@ -1,5 +1,6 @@
 package com.healthcare.domain.model.entity;
 
+import com.healthcare.domain.dto.request.ScheduleRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,4 +27,17 @@ public class Schedule {
     @ManyToOne
     @JoinColumn(name = "medic_id", nullable = false)
     private Medic medic;
+
+    public Schedule(ScheduleRequestDTO scheduleRequestDTO, Medic medic) {
+        this.start = scheduleRequestDTO.getStart();
+        this.end = scheduleRequestDTO.getEnd();
+        this.dayOfWeek = scheduleRequestDTO.getDayOfWeek();
+        this.medic = medic;
+    }
+
+    public Schedule(ScheduleRequestDTO scheduleRequestDTO) {
+        this.start = scheduleRequestDTO.getStart();
+        this.end = scheduleRequestDTO.getEnd();
+        this.dayOfWeek = scheduleRequestDTO.getDayOfWeek();
+    }
 }

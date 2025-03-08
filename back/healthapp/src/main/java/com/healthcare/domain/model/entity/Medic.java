@@ -43,7 +43,7 @@ public class Medic {
     private String phone;
     @OneToMany(mappedBy = "medic", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Appointment> appointment;
-    @OneToOne @JoinColumn(name = "user_id")
+    @OneToOne(cascade = CascadeType.ALL) @JoinColumn(name = "user_id")
     private User user;
     @OneToOne @JoinColumn(name = "image_id")
     private Image image;

@@ -17,6 +17,6 @@ public class Admin {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
-    @OneToOne @JoinColumn(name = "user_id")
+    @OneToOne(cascade = CascadeType.ALL) @JoinColumn(name = "user_id")
     private User user;
 }

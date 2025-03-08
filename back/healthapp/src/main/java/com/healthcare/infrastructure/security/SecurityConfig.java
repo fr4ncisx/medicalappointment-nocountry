@@ -28,10 +28,7 @@ public class SecurityConfig {
                 .csrf(CsrfConfigurer::disable)
                 .authorizeHttpRequests(httpRequest -> {
                     httpRequest.requestMatchers(adminEndpoints()).hasRole(ROLE_ADMIN);
-                    httpRequest.requestMatchers(medicEndpoints()).hasAnyRole(ROLE_ADMIN, "MEDICO");
-                    httpRequest.requestMatchers(patientEndpoints()).hasAnyRole(ROLE_ADMIN, "PACIENTE");
-                    httpRequest.requestMatchers(
-                            publicEndpoints()).permitAll();
+                    httpRequest.requestMatchers(publicEndpoints()).permitAll();
                     httpRequest.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session
@@ -44,20 +41,14 @@ public class SecurityConfig {
         return new String[] { "/api/v1/admin/**" };
     }
 
-    private String[] medicEndpoints() {
-        return new String[] { "/api/v1/medic/**" };
-    }
-
-    private String[] patientEndpoints() {
-        return new String[] { "/api/v1/patient/**" };
-    }
-
     private String[] publicEndpoints() {
-        return new String[] { "/auth/**",
+        return new String[] { "/api/v1/user/**",
+                "/auth/**",
                 "/swagger-ui.html",
                 "/v3/api-docs/**",
-                "/swagger-ui/**"
-        };
+                "/swagger-ui/**",
+                "/api/v1/patient/**",
+                "/api/v1/medic/**" };
     }
 
     @Bean

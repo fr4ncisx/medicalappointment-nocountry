@@ -7,6 +7,7 @@ import com.healthcare.domain.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -34,6 +35,12 @@ public class GlobalExceptionHandler {
     
         errors.put("error", errorMsg);
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public ResponseEntity<?> mediaTypeNotSupportedEx(HttpMediaTypeNotSupportedException ex) {
+        return new ResponseEntity<>(Map.of("error", ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NotFoundInDatabaseException.class)

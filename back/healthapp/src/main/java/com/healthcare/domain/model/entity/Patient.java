@@ -1,6 +1,6 @@
 package com.healthcare.domain.model.entity;
 
-import com.healthcare.domain.dto.PatientDTO;
+import com.healthcare.domain.dto.PatientRequestDTO;
 import com.healthcare.domain.model.enums.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,7 +28,7 @@ public class Patient {
     private String phone;
     private String address;
     private String emergencyContactInfo;
-    @OneToOne @JoinColumn(name = "user_id")
+    @OneToOne(cascade = CascadeType.ALL) @JoinColumn(name = "user_id")
     private User user;
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Appointment> appointments;
@@ -41,7 +41,7 @@ public class Patient {
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DiagnosticImages> diagnosticImages;
     
-    public Patient(PatientDTO patientDTO) {
+    public Patient(PatientRequestDTO patientDTO) {
         this.firstName = patientDTO.getFirstName();
         this.lastName = patientDTO.getLastName();
         this.documentId = patientDTO.getDocumentId();

@@ -47,6 +47,8 @@ public class Medic {
     private User user;
     @OneToOne @JoinColumn(name = "image_id")
     private Image image;
+    @OneToMany(mappedBy = "medic", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Schedule> schedules;
     
     public Medic(MedicDTO medicDTO) {
         this.name = medicDTO.getName();

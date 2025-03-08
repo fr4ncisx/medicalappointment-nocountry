@@ -25,5 +25,5 @@ public class PatientRequestDTO {
     @NotNull @NotBlank private String address;
     @NotNull @NotBlank private String emergencyContactInfo;
     @JsonProperty("user")
-    @NotNull private UserDTO user;
+    @NotNull private UserRequestDTO user;
 }

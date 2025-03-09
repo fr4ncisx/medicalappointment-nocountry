@@ -61,9 +61,7 @@ public class JwtUtils {
             throw new JWTVerificationException("La firma del token no es válida", ex);
         } catch (AlgorithmMismatchException ex) {
             throw new JWTVerificationException("El algoritmo del token no coincide", ex);
-        } catch (MissingClaimException ex) {
-            throw new JWTVerificationException(ex.getMessage(), ex);
-        } catch (IncorrectClaimException ex) {
+        } catch (MissingClaimException | IncorrectClaimException ex) {
             throw new JWTVerificationException(ex.getMessage(), ex);
         } catch (JWTVerificationException ex) {
             throw new JWTVerificationException("Error en la verificación del token", ex);

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class MedicalRecordsReponse {
+    private Long id;
     private LocalDate recordDate;
     private String visitReason;
     private String symptoms;

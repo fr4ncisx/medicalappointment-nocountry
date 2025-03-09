@@ -1,0 +1,51 @@
+package com.healthcare.domain.controller;
+
+import com.healthcare.domain.dto.request.MedicationsRequestDTO;
+import com.healthcare.domain.dto.response.MedicationsResponseDTO;
+import com.healthcare.domain.service.IMedicationService;
+import com.healthcare.domain.utils.Response;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/api/v1/medication")
+public class MedicationController {
+
+    private final IMedicationService medicationService;
+
+    @PostMapping("{id}")
+    public ResponseEntity<Map<String, String>> assignMedication(@PathVariable Long id,
+                                                                @RequestBody @Valid MedicationsRequestDTO medicationsRequestDTO) {
+        medicationService.assign(id, medicationsRequestDTO);
+        return ResponseEntity.ok(Response.create("Medicación cargada exitosamente"));
+    }
+
+    @PutMapping("{patientId}/{medicationId}")
+    public ResponseEntity<Map<String, String>> editMedication(@PathVariable Long patientId,
+                                                              @PathVariable Long medicationId,
+                                                              @RequestBody @Valid MedicationsRequestDTO medicationsRequestDTO) {
+        medicationService.edit(patientId, medicationId, medicationsRequestDTO);
+        return ResponseEntity.ok(Response.create("Medicación editada exitosamente"));
+    }
+
+    @DeleteMapping("{patientId}/{medicationId}")
+    public ResponseEntity<Map<String, String>> deleteMedication(@PathVariable Long patientId,
+                                                                @PathVariable Long medicationId) {
+        medicationService.delete(patientId, medicationId);
+        return ResponseEntity.ok(Response.create("Medicación eliminada correctamente"));        
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<List<MedicationsResponseDTO>>getMedications(@PathVariable Long id){
+        var responseBody = medicationService.getAll(id);
+        return ResponseEntity.ok(responseBody);
+    }
+
+}

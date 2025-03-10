@@ -1,20 +1,20 @@
 package com.healthcare.domain.controller;
 
-import com.healthcare.domain.dto.MedicDTO;
+import com.healthcare.domain.dto.request.MedicRequest;
 import com.healthcare.domain.service.IMedicService;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/medic")
 public class MedicController {
 
-    @Autowired
-    private IMedicService medicService;
+    private final IMedicService medicService;
 
     @GetMapping
     public ResponseEntity<?> getAllMedics(
@@ -30,8 +30,8 @@ public class MedicController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createMedic(@RequestBody @Valid MedicDTO medicDTO) {
-        return medicService.createMedic(medicDTO);
+    public ResponseEntity<?> createMedic(@RequestBody @Valid MedicRequest medicRequest) {
+        return medicService.createMedic(medicRequest);
     }
 
     @DeleteMapping("/{id}")

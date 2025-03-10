@@ -1,4 +1,4 @@
-package com.healthcare.domain.dto;
+package com.healthcare.domain.dto.request;
 
 import com.healthcare.domain.model.enums.Gender;
 import com.healthcare.domain.model.enums.Speciality;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MedicDTO{
+public class MedicRequest{
     @NotNull @NotBlank private String name;
     @NotNull @NotBlank private String lastname;
     @NotNull @NotBlank private String description;

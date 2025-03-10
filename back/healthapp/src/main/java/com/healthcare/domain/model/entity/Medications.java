@@ -1,5 +1,6 @@
 package com.healthcare.domain.model.entity;
 
+import com.healthcare.domain.dto.request.MedicationsRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,4 +28,14 @@ public class Medications {
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;
+
+    public Medications(MedicationsRequestDTO medicationsRequest, Patient patient) {
+        this.medicationName = medicationsRequest.getMedicationName();
+        this.dosage = medicationsRequest.getDosage();
+        this.frequency = medicationsRequest.getFrequency();
+        this.startDate = medicationsRequest.getStartDate();
+        this.endDate = medicationsRequest.getEndDate();
+        this.notes = medicationsRequest.getNotes();
+        this.patient = patient;
+    }
 }

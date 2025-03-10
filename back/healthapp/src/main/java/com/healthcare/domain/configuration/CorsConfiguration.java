@@ -10,11 +10,13 @@ public class CorsConfiguration implements WebMvcConfigurer{
 
     @Value("${cors.frontend.ip}")
     private String deployFrontIP;
+    @Value("${cors.backend.ip}")
+    private String deployBackendIP;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-        .allowedOrigins(deployFrontIP)
+        .allowedOrigins(deployFrontIP,deployBackendIP)
         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT")
         .allowedHeaders("*");
     }

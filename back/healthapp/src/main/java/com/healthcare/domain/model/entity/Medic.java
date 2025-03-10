@@ -2,7 +2,7 @@ package com.healthcare.domain.model.entity;
 
 import java.util.List;
 
-import com.healthcare.domain.dto.MedicDTO;
+import com.healthcare.domain.dto.request.MedicRequest;
 import com.healthcare.domain.model.enums.Gender;
 import com.healthcare.domain.model.enums.Speciality;
 import jakarta.persistence.CascadeType;
@@ -50,14 +50,14 @@ public class Medic {
     @OneToMany(mappedBy = "medic", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Schedule> schedules;
     
-    public Medic(MedicDTO medicDTO) {
-        this.name = medicDTO.getName();
-        this.lastName = medicDTO.getLastname();
-        this.description = medicDTO.getDescription();
-        this.state = medicDTO.getState();
-        this.documentId = medicDTO.getDocumentId();
-        this.gender = medicDTO.getGender();
-        this.speciality = medicDTO.getSpeciality();
-        this.phone = medicDTO.getPhone();
+    public Medic(MedicRequest medic) {
+        this.name = medic.getName();
+        this.lastName = medic.getLastname();
+        this.description = medic.getDescription();
+        this.state = medic.getState();
+        this.documentId = medic.getDocumentId();
+        this.gender = medic.getGender();
+        this.speciality = medic.getSpeciality();
+        this.phone = medic.getPhone();
     }
 }

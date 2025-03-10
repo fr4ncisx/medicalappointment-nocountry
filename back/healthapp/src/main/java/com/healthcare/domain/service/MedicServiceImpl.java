@@ -1,6 +1,7 @@
 package com.healthcare.domain.service;
 
-import com.healthcare.domain.dto.MedicDTO;
+import com.healthcare.domain.dto.request.MedicRequest;
+import com.healthcare.domain.dto.response.MedicResponse;
 import com.healthcare.domain.exceptions.*;
 import com.healthcare.domain.model.entity.Medic;
 import com.healthcare.domain.repository.AppointmentRepository;
@@ -45,8 +46,8 @@ public class MedicServiceImpl implements IMedicService {
                     .toList();
         }
 
-        List<MedicDTO> medicDTOS = medics.stream()
-                .map(medicEntity -> modelMapper.map(medicEntity, MedicDTO.class))
+        List<MedicResponse> medicDTOS = medics.stream()
+                .map(medicEntity -> modelMapper.map(medicEntity, MedicResponse.class))
                 .toList();
 
         if (medicDTOS.isEmpty()) {
@@ -60,26 +61,26 @@ public class MedicServiceImpl implements IMedicService {
     public ResponseEntity<?> getMedicById(Long id) {
         Medic medic = medicRepository.findById(id)
                 .orElseThrow(() -> new MedicNotFoundException("Médico no encontrado"));
-        MedicDTO dto = modelMapper.map(medic, MedicDTO.class);
+                MedicResponse dto = modelMapper.map(medic, MedicResponse.class);
         return ResponseEntity.ok(Map.of("medic", dto));
     }
 
     @Override
     @Transactional
-    public ResponseEntity<?> createMedic(MedicDTO medicDTO) {
-        if(medicDTO == null){
+    public ResponseEntity<?> createMedic(MedicRequest medicRequest) {
+        if(medicRequest == null){
             throw new InvalidDataException("El cuerpo de la solicitud es obligatorio");
         }
 
-        if(medicRepository.existsByDocumentId(medicDTO.getDocumentId())) {
+        if(medicRepository.existsByDocumentId(medicRequest.getDocumentId())) {
             throw new DuplicatedEntryEx("Médico ya registrado");
         }
 
-        Medic medic = new Medic(medicDTO);
+        Medic medic = new Medic(medicRequest);
         medicRepository.save(medic);
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                 "message", "Médico creado con éxito",
-                "medic", medicDTO
+                "medic", medicRequest
         ));
     }
 

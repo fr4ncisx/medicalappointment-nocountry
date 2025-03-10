@@ -1,25 +1,23 @@
 package com.healthcare.domain.dto.response;
 
-import java.time.LocalDate;
-
 import com.healthcare.domain.model.enums.Gender;
+import com.healthcare.domain.model.enums.Speciality;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class PatientResponseDTO {
+@NoArgsConstructor
+public class MedicResponse {
     private Long id;
-    private String firstName;
-    private String lastName;
+    private String name;
+    private String lastname;
+    private String description;
+    private String state;
     private String documentId;
-    private LocalDate birthDate;
-    private Gender gender;
+    Gender gender;
+    Speciality speciality;
     private String phone;
-    private String address;
-    private String emergencyContactInfo;
 }

@@ -38,7 +38,6 @@ public class MedicationServiceImpl implements IMedicationService {
         var meds = getMedication(medicationId);
         modelMapper.map(medicationsRequestDTO, meds);
         patient.getMedications().add(meds);
-        meds.setPatient(patient);
         patientRepository.save(patient);
     }
 
@@ -52,9 +51,13 @@ public class MedicationServiceImpl implements IMedicationService {
     @Override
     public List<MedicationsResponseDTO> getAll(Long patientId) {
         var patient = getPatient(patientId);
-        return patient.getMedications().stream()
-                .map(m -> modelMapper.map(m, MedicationsResponseDTO.class))
-                .toList();
+        var getMeds = patient.getMedications();
+        if (!getMeds.isEmpty()) {
+            return getMeds.stream()
+                    .map(m -> modelMapper.map(m, MedicationsResponseDTO.class))
+                    .toList();
+        }
+        throw new NotFoundInDatabaseException("La lista de medicamentos está vacía");
     }
 
     private Patient getPatient(Long id) {

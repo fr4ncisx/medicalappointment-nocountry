@@ -39,9 +39,8 @@ public class MedicationController {
     }
 
     @PreAuthorize("hasAnyRole({'ADMIN','MEDICO'})")
-    @DeleteMapping("{patientId}/{medicationId}")
-    public ResponseEntity<Map<String, String>> deleteMedication(@PathVariable Long patientId,
-                                                                @PathVariable Long medicationId) {
+    @DeleteMapping("/{medicationId}")
+    public ResponseEntity<Map<String, String>> deleteMedication(@PathVariable Long medicationId) {
         medicationService.delete(medicationId);
         return ResponseEntity.ok(Response.create("Medicación eliminada correctamente"));        
     }

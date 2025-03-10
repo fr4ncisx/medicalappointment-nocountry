@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -45,21 +44,17 @@ public class MedicationServiceImpl implements IMedicationService {
 
     @Transactional
     @Override
-    public void delete(Long patientId, Long medicationId) {
-        Patient patient = getPatient(patientId);
+    public void delete(Long medicationId) {
         Medications meds = getMedication(medicationId);
-        patient.getMedications().remove(meds);
-        patientRepository.save(patient);
         medicationRepository.delete(meds);
     }
 
     @Override
     public List<MedicationsResponseDTO> getAll(Long patientId) {
         var patient = getPatient(patientId);
-        var medsResponse = patient.getMedications().stream()
+        return patient.getMedications().stream()
                 .map(m -> modelMapper.map(m, MedicationsResponseDTO.class))
-                .collect(Collectors.toList());
-        return medsResponse;
+                .toList();
     }
 
     private Patient getPatient(Long id) {

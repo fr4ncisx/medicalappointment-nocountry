@@ -8,6 +8,7 @@ import com.healthcare.domain.utils.Response;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class MedicationController {
 
     private final IMedicationService medicationService;
 
+    @PreAuthorize("hasAnyRole({'ADMIN','MEDICO'})")
     @PostMapping("{id}")
     public ResponseEntity<Map<String, String>> assignMedication(@PathVariable Long id,
                                                                 @RequestBody @Valid MedicationsRequestDTO medicationsRequestDTO) {
@@ -27,6 +29,7 @@ public class MedicationController {
         return ResponseEntity.ok(Response.create("Medicación cargada exitosamente"));
     }
 
+    @PreAuthorize("hasAnyRole({'ADMIN','MEDICO'})")
     @PutMapping("{patientId}/{medicationId}")
     public ResponseEntity<Map<String, String>> editMedication(@PathVariable Long patientId,
                                                               @PathVariable Long medicationId,
@@ -35,6 +38,7 @@ public class MedicationController {
         return ResponseEntity.ok(Response.create("Medicación editada exitosamente"));
     }
 
+    @PreAuthorize("hasAnyRole({'ADMIN','MEDICO'})")
     @DeleteMapping("{patientId}/{medicationId}")
     public ResponseEntity<Map<String, String>> deleteMedication(@PathVariable Long patientId,
                                                                 @PathVariable Long medicationId) {
@@ -42,6 +46,7 @@ public class MedicationController {
         return ResponseEntity.ok(Response.create("Medicación eliminada correctamente"));        
     }
 
+    @PreAuthorize("hasAnyRole({'ADMIN','MEDICO'})")
     @GetMapping("{id}")
     public ResponseEntity<List<MedicationsResponseDTO>>getMedications(@PathVariable Long id){
         var responseBody = medicationService.getAll(id);

@@ -28,15 +28,15 @@ public class MedicalRecordController {
     private final IMedicalRecordsService medicalRecordsService;
 
     @PreAuthorize("hasAnyRole({'ADMIN','MEDICO'})")
-    @GetMapping("/{id}")
-    public ResponseEntity<List<MedicalRecordsReponse>> getMedicalRecords(@PathVariable Long id){
-        return new ResponseEntity<>(medicalRecordsService.retrieveRecords(id), HttpStatus.OK);
+    @GetMapping("/{patientId}")
+    public ResponseEntity<List<MedicalRecordsReponse>> getMedicalRecords(@PathVariable Long patientId){
+        return new ResponseEntity<>(medicalRecordsService.retrieveRecords(patientId), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole({'ADMIN','MEDICO'})")
-    @PostMapping("/{id}")
-    public ResponseEntity<Map<String,String>> createMedicalRecord(@PathVariable Long id, @RequestBody @Valid MedicalRecordsRequest request){
-        medicalRecordsService.createMedicalRecord(id, request); 
+    @PostMapping("/{patientId}")
+    public ResponseEntity<Map<String,String>> createMedicalRecord(@PathVariable Long patientId, @RequestBody @Valid MedicalRecordsRequest request){
+        medicalRecordsService.createMedicalRecord(patientId, request); 
         return new ResponseEntity<>(Map.of("status", "Historial médico cargado exitosamente"), HttpStatus.CREATED);
     }
 }

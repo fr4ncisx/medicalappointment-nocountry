@@ -22,10 +22,10 @@ public class MedicationController {
     private final IMedicationService medicationService;
 
     @PreAuthorize("hasAnyRole({'ADMIN','MEDICO'})")
-    @PostMapping("{id}")
-    public ResponseEntity<Map<String, String>> assignMedication(@PathVariable Long id,
+    @PostMapping("{patientId}")
+    public ResponseEntity<Map<String, String>> assignMedication(@PathVariable Long patientId,
                                                                 @RequestBody @Valid MedicationsRequestDTO medicationsRequestDTO) {
-        medicationService.assign(id, medicationsRequestDTO);
+        medicationService.assign(patientId, medicationsRequestDTO);
         return ResponseEntity.ok(Response.create("Medicación cargada exitosamente"));
     }
 
@@ -46,9 +46,9 @@ public class MedicationController {
     }
 
     @PreAuthorize("hasAnyRole({'ADMIN','MEDICO'})")
-    @GetMapping("{id}")
-    public ResponseEntity<List<MedicationsResponseDTO>>getMedications(@PathVariable Long id){
-        var responseBody = medicationService.getAll(id);
+    @GetMapping("{patientId}")
+    public ResponseEntity<List<MedicationsResponseDTO>>getMedications(@PathVariable Long patientId){
+        var responseBody = medicationService.getAll(patientId);
         return ResponseEntity.ok(responseBody);
     }
 

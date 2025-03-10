@@ -24,7 +24,7 @@ public class UserController {
 
     @PreAuthorize("hasAnyRole({'ADMIN','MEDICO','PACIENTE'})")
     @GetMapping
-    public ResponseEntity<UserResponseDTO> getMethodName(@RequestParam String email, HttpServletRequest request) {
+    public ResponseEntity<UserResponseDTO> getUserDetails(@RequestParam String email, HttpServletRequest request) {
         var response = userService.getUser(email, request);
         return ResponseEntity.ok(response);
     }    

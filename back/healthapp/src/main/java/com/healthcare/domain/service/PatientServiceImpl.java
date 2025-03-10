@@ -50,7 +50,7 @@ public class PatientServiceImpl implements IPatientService{
     public ResponseEntity<?> getPatientById(Long id){
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new PatientNotFoundException("Paciente no encontrado"));
-        PatientRequestDTO patientDTO = modelMapper.map(patient, PatientRequestDTO.class);
+        var patientDTO = modelMapper.map(patient, PatientResponseDTO.class);
         return ResponseEntity.ok(Map.of("patient", patientDTO));
     }
 

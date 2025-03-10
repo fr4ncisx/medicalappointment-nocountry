@@ -10,7 +10,8 @@ interface Params {
 
 export const loginUser = async ({ data, setError, setLoading }: Params): Promise<string> => {
     setLoading(true);
-    const LOGIN_URL = `${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_BACKEND_PORT}/auth/login`;
+    // const LOGIN_URL = `${import.meta.env.VITE_BACKEND_URL}:${import.meta.env.VITE_BACKEND_PORT}/auth/login`;
+    const LOGIN_URL = `https://healthapplication.koyeb.app/auth/login`;
     const params: RequestInit = {
         method: "POST",
         headers: {

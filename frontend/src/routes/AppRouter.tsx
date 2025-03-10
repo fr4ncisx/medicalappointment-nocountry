@@ -6,23 +6,10 @@ import { AgendaTuCitaSection } from "@components/sections/AgendaTuCita/AgendaTuC
 import { PacienteGuard } from "@routes/PacienteGuard";
 import { AdminGuard } from "@routes/AdminGuard";
 import { MedicoGuard } from "@routes/MedicoGuard";
-import { useEffect } from "react";
-import { useUserStore } from "@store/user.store";
-import { UserRole } from "@tipos/store";
 import { NotFound } from "@components/layout/NotFound/NotFound";
 import { DoctorDetails } from "@components/sections/MedicosDisponibles/DoctorDetails/doctorDetails";
 
 export const AppRouter = () => {
-    const setUserData = useUserStore(state => state.setUserData);
-    useEffect(() => {
-        setUserData({
-            id: "69",
-            name: "User Unknow",
-            role: UserRole.PACIENTE
-        });
-        localStorage.setItem("token","123123123asdasdasdasdasdasd");
-    }, []);
-
     return (
         <BrowserRouter>
             <Routes>

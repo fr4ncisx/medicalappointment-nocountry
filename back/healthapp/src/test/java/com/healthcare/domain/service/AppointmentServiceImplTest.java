@@ -48,8 +48,6 @@ class AppointmentServiceImplTest {
 
         Medic mockMedic = new Medic();
         mockMedic.setId(2L);
-
-        mockAppointment = new Appointment(1L, LocalDateTime.now(), "Prueba", Status.CANCELADA, mockMedic, mockPatient);
     }
 
     @Test

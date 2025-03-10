@@ -1,6 +1,7 @@
 package com.healthcare.domain.model.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import com.healthcare.domain.model.enums.Status;
 import jakarta.persistence.*;
@@ -18,8 +19,10 @@ public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "appointment_date", nullable = false)
-    private LocalDateTime dateTime;
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
+    @Column(name = "time", nullable = false)
+    private LocalTime time;
     @Column(name = "visit_reason")
     private String visitReason;
     @Enumerated(EnumType.STRING)

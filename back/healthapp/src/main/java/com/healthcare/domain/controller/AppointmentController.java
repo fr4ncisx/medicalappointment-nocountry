@@ -1,8 +1,9 @@
 package com.healthcare.domain.controller;
 
-import com.healthcare.domain.dto.AppointmentDTO;
+import com.healthcare.domain.dto.request.AppointmentRequest;
 import com.healthcare.domain.service.IAppointmentService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
@@ -18,23 +19,21 @@ public class AppointmentController {
 
     @PreAuthorize("hasAnyRole({'ADMIN','MEDICO', 'PACIENTE'})")
     @PostMapping("/schedule")
-    public ResponseEntity<?> scheduleAppointment(@RequestBody AppointmentDTO appointmentDTO) {
+    public ResponseEntity<?> scheduleAppointment(@RequestParam Long patientId, @RequestParam Long medicId,
+            @RequestBody @Valid AppointmentRequest appointmentRequest) {
         return appointmentService.scheduleAppointment(
-                appointmentDTO.patientId(),
-                appointmentDTO.medicId(),
-                appointmentDTO.dateTime()
-        );
+                patientId,
+                medicId, appointmentRequest);
     }
 
     @PreAuthorize("hasAnyRole({'ADMIN','MEDICO', 'PACIENTE'})")
     @PutMapping("/update/{appointmentId}")
     public ResponseEntity<?> updateAppointment(
             @PathVariable Long appointmentId,
-            @RequestBody AppointmentDTO appointmentDTO) {
+            @RequestBody @Valid AppointmentRequest appointmentRequest) {
         return appointmentService.updateAppointment(
                 appointmentId,
-                appointmentDTO.dateTime()
-        );
+                appointmentRequest);
     }
 
     @PreAuthorize("hasAnyRole({'ADMIN','MEDICO', 'PACIENTE'})")

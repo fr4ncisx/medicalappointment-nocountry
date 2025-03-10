@@ -20,14 +20,14 @@ public class SwaggerConfig {
     @Bean
     OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .addServersItem(new Server().url(deployUrl).description("Deploy server"))
-                .addServersItem(new Server().url(localhostUrl).description("Local server"))
+                .addServersItem(new Server().url(localhostUrl).description("Deploy server"))
+                .addServersItem(new Server().url(deployUrl).description("Frontend server"))
                 .components(new Components()
-                    .addSecuritySchemes("bearer-key",
-                        new SecurityScheme()
-                            .type(SecurityScheme.Type.HTTP)
-                            .scheme("bearer")
-                            .bearerFormat("JWT")))
+                        .addSecuritySchemes("bearer-key",
+                                new SecurityScheme()
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")))
                 .addSecurityItem(new SecurityRequirement().addList("bearer-key"));
     }
 }

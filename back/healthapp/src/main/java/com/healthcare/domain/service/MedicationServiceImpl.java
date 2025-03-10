@@ -43,6 +43,7 @@ public class MedicationServiceImpl implements IMedicationService {
 
     @Transactional
     @Override
+
     public void delete(Long patientId, Long medicationId) {
         Medications meds = getMedication(medicationId);
         medicationRepository.delete(meds);

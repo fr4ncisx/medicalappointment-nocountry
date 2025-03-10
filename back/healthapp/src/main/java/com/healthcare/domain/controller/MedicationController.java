@@ -42,7 +42,7 @@ public class MedicationController {
     @DeleteMapping("{patientId}/{medicationId}")
     public ResponseEntity<Map<String, String>> deleteMedication(@PathVariable Long patientId,
                                                                 @PathVariable Long medicationId) {
-        medicationService.delete(patientId, medicationId);
+        medicationService.delete(medicationId);
         return ResponseEntity.ok(Response.create("Medicación eliminada correctamente"));        
     }
 

@@ -1,5 +1,6 @@
 package com.healthcare.domain.model.entity;
 
+import com.healthcare.domain.dto.request.LabResultsRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,4 +25,11 @@ public class LabResults {
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;
+
+    public LabResults(LabResultsRequest request, Patient patient) {
+        this.resultDate = request.getResultDate();
+        this.testType = request.getTestType();
+        this.results = request.getResults();
+        this.patient = patient;
+    }
 }

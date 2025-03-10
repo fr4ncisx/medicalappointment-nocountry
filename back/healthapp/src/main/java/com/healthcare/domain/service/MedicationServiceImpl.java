@@ -38,7 +38,6 @@ public class MedicationServiceImpl implements IMedicationService {
         var meds = getMedication(medicationId);
         modelMapper.map(medicationsRequestDTO, meds);
         patient.getMedications().add(meds);
-        meds.setPatient(patient);
         patientRepository.save(patient);
     }
 

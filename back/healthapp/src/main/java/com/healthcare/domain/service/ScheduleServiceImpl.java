@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -61,7 +60,7 @@ public class ScheduleServiceImpl implements IScheduleService {
 
         ScheduleResponse scheduleResponse = modelMapper.map(schedule, ScheduleResponse.class);
 
-        return ResponseEntity.ok(Map.of("schedule", scheduleResponse));
+        return ResponseEntity.ok(scheduleResponse);
     }
 
     @Override
@@ -76,19 +75,15 @@ public class ScheduleServiceImpl implements IScheduleService {
 
         ScheduleResponse scheduleResponse = modelMapper.map(updatedSchedule, ScheduleResponse.class);
 
-        return ResponseEntity.ok(Map.of(
-                "message", "Horario actualizado con éxito",
-                "schedule", scheduleResponse
-        ));
+        return ResponseEntity.ok(scheduleResponse);
     }
 
     @Override
     @Transactional
     public ResponseEntity<?> deleteSchedule(Long scheduleId) {
         Schedule schedule = getSchedule(scheduleId);
-        schedule.getMedic().getSchedules().remove(schedule);
         scheduleRepository.delete(schedule);
-        return ResponseEntity.ok(Map.of("message", "Horario eliminado con éxito"));
+        return ResponseEntity.ok(Response.create("message", "Horario eliminado con éxito"));
     }
 
     private Schedule getSchedule(Long id){

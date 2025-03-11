@@ -4,7 +4,6 @@ import com.healthcare.domain.dto.request.ScheduleRequest;
 import com.healthcare.domain.service.ScheduleServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +13,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/schedule")
 public class ScheduleController {
 
-    @Autowired
-    private ScheduleServiceImpl scheduleService;
+    private final ScheduleServiceImpl scheduleService;
 
     @PreAuthorize("hasAnyRole({'ADMIN', 'MEDICO'})")
-    @PostMapping("/medic/{medicId}")
+    @PostMapping("/{medicId}")
     public ResponseEntity<?> createSchedule(
             @PathVariable Long medicId, @RequestBody @Valid ScheduleRequest scheduleRequest) {
         return scheduleService.createSchedule(medicId, scheduleRequest);

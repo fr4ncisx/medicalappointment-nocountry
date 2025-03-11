@@ -30,8 +30,7 @@ public class ScheduleServiceImpl implements IScheduleService {
     @Override
     @Transactional
     public ResponseEntity<?> createSchedule(Long medicId, ScheduleRequest scheduleRequest) {
-        Medic medic = medicRepository.findById(medicId)
-                .orElseThrow(() -> new MedicNotFoundException("Médico no encontrado"));
+        Medic medic = getMedic(medicId);
 
         Schedule schedule = new Schedule(scheduleRequest, medic);
         scheduleRepository.save(schedule);
@@ -41,8 +40,7 @@ public class ScheduleServiceImpl implements IScheduleService {
 
     @Override
     public ResponseEntity<?> getAllSchedulesByMedicId(Long medicId) {
-        Medic medic = medicRepository.findById(medicId)
-                .orElseThrow(() -> new MedicNotFoundException("Médico no encontrado"));
+        Medic medic = getMedic(medicId);
 
         List<Schedule> schedules = medic.getSchedules();
 
@@ -59,8 +57,7 @@ public class ScheduleServiceImpl implements IScheduleService {
 
     @Override
     public ResponseEntity<?> getScheduleById(Long scheduleId) {
-        Schedule schedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new NotFoundInDatabaseException("Horario no encontrado"));
+        Schedule schedule = getSchedule(scheduleId);
 
         ScheduleResponse scheduleResponse = modelMapper.map(schedule, ScheduleResponse.class);
 
@@ -70,8 +67,7 @@ public class ScheduleServiceImpl implements IScheduleService {
     @Override
     @Transactional
     public ResponseEntity<?> updateSchedule(Long scheduleId, ScheduleRequest scheduleRequest) {
-        Schedule schedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new NotFoundInDatabaseException("Horario no encontrado"));
+        Schedule schedule = getSchedule(scheduleId);
 
         Schedule updatedSchedule = new Schedule(scheduleRequest, schedule.getMedic());
         updatedSchedule.setId(schedule.getId());
@@ -89,11 +85,19 @@ public class ScheduleServiceImpl implements IScheduleService {
     @Override
     @Transactional
     public ResponseEntity<?> deleteSchedule(Long scheduleId) {
-        Schedule schedule = scheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new NotFoundInDatabaseException("Horario no encontrado"));
-
+        Schedule schedule = getSchedule(scheduleId);
+        schedule.getMedic().getSchedules().remove(schedule);
         scheduleRepository.delete(schedule);
-
         return ResponseEntity.ok(Map.of("message", "Horario eliminado con éxito"));
+    }
+
+    private Schedule getSchedule(Long id){
+        return scheduleRepository.findById(id)
+                .orElseThrow(() -> new NotFoundInDatabaseException("Horario no encontrado"));
+    }
+
+    private Medic getMedic(Long id){
+        return medicRepository.findById(id)
+                .orElseThrow(() -> new MedicNotFoundException("Médico no encontrado"));
     }
 }

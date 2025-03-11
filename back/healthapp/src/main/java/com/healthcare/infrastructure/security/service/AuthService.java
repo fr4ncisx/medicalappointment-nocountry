@@ -2,7 +2,6 @@ package com.healthcare.infrastructure.security.service;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,17 +22,15 @@ import com.healthcare.infrastructure.dto.request.UserAuthenticated;
 import com.healthcare.infrastructure.dto.response.ResponseTokenDTO;
 import com.healthcare.infrastructure.security.utils.JwtUtils;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class AuthService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private JwtUtils jwtUtils;
-
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final JwtUtils jwtUtils;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     /**
      * 
@@ -94,7 +91,7 @@ public class AuthService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email)
                 .map(UserAuthenticated::new)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+                .orElseThrow(() -> new UsernameNotFoundException("Email no encontrado"));
     }
 
     public <U extends UserAuthenticated> void passwordMatches(RequestLoginDTO requestFromLogin, U userFromRepository) {

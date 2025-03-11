@@ -1,7 +1,6 @@
 package com.healthcare.infrastructure.security;
 
 import java.io.IOException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -14,23 +13,24 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 
+
+@RequiredArgsConstructor
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    //TODO: Work in progress to implement role interception
-    //private final Set<String> PUBLIC_ENDPOINTS = Set.of("");
+    private final JwtUtils jwtUtils;
 
-    @Autowired
-    private JwtUtils jwtUtils;
+    private final AuthService authService;
 
-    @Autowired
-    private AuthService authService;
+    private static final String AUTHORIZATION = "Authorization";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        if (!hasTokenAuthorization(request)) {
+        if (hasTokenAuthorization(request)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -48,12 +48,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private boolean hasTokenAuthorization(HttpServletRequest request) {
-        if (request.getHeader("Authorization") == null || request.getHeader("Authorization").isBlank()) {
-            return false;
-        }
-        return true;
+        return request.getHeader(AUTHORIZATION) == null || request.getHeader(AUTHORIZATION).isBlank();
     }
-    private String getTokenFromHeader(HttpServletRequest request){
-        return request.getHeader("Authorization").replace("Bearer ", "");
+    private String getTokenFromHeader(@NotNull HttpServletRequest request){
+        return request.getHeader(AUTHORIZATION).replace("Bearer ", "");
     }
 }

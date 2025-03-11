@@ -1,7 +1,8 @@
 package com.healthcare.domain.service;
 
-import com.healthcare.domain.dto.request.PatientRequestDTO;
-import com.healthcare.domain.dto.request.UserRequestDTO;
+import com.healthcare.domain.dto.request.PatientRequest;
+import com.healthcare.domain.dto.request.PatientRequestUpdate;
+import com.healthcare.domain.dto.request.UserRequest;
 import com.healthcare.domain.dto.response.PatientResponseDTO;
 import com.healthcare.domain.exceptions.DuplicatedEntryEx;
 import com.healthcare.domain.exceptions.InvalidDataException;
@@ -12,7 +13,6 @@ import com.healthcare.domain.model.entity.User;
 import com.healthcare.domain.model.enums.Role;
 import com.healthcare.domain.repository.PatientRepository;
 import com.healthcare.domain.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -56,9 +56,9 @@ public class PatientServiceImpl implements IPatientService{
 
     @Override
     @Transactional
-    public ResponseEntity<?> createPatient(PatientRequestDTO patientDTO) {
+    public ResponseEntity<?> createPatient(PatientRequest patientDTO) {
         assertValidation(patientDTO);
-        UserRequestDTO userDTO = patientDTO.getUser();        
+        UserRequest userDTO = patientDTO.getUser();        
         Patient patient = new Patient(patientDTO);
         User user = new User(userDTO, encodePassword(userDTO.getPassword()), Role.PACIENTE);
         userRepository.save(user);
@@ -72,13 +72,25 @@ public class PatientServiceImpl implements IPatientService{
     @Override
     @Transactional
     public ResponseEntity<?> deletePatient(Long id){
-        Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new PatientNotFoundException("Paciente no encontrado"));
+        var patient = notNull(id);
         patientRepository.delete(patient);
         return ResponseEntity.ok(Map.of("message", "Paciente eliminado con éxito"));
     }
 
-    private void assertValidation(PatientRequestDTO patientDTO) {
+    @Override
+    @Transactional
+    public void edit(Long id, PatientRequestUpdate patientRequest){
+        var patient = notNull(id);
+        modelMapper.map(patientRequest, patient);
+        patientRepository.save(patient);
+    }
+
+    private Patient notNull(Long id){
+        return patientRepository.findById(id)
+                .orElseThrow(() -> new PatientNotFoundException("Paciente no encontrado"));
+    }
+
+    private void assertValidation(PatientRequest patientDTO) {
         if (patientDTO == null) {
             throw new InvalidDataException("El cuerpo de la solicitud es obligatorio");
         }

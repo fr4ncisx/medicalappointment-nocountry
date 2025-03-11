@@ -9,6 +9,7 @@ import { MedicoGuard } from "@routes/MedicoGuard";
 import { NotFound } from "@components/layout/NotFound/NotFound";
 import { DoctorDetails } from "@components/sections/MedicosDisponibles/DoctorDetails/doctorDetails";
 import { DashboardAdmin } from "@components/sections/DashboardAdmin/DashboardAdmin";
+import { DashboardPatient } from "@components/sections/DashboardPatient/DashboardPatient";
 import { DashboardMedico } from "@components/sections/DashboardMedico/DashboardMedico";
 
 export const AppRouter = () => {
@@ -22,7 +23,7 @@ export const AppRouter = () => {
                     <Route path="/agendar-cita" element={<AgendaTuCitaSection />} />
                     <Route path="/" element={<Welcome />} />
                     <Route element={<PacienteGuard />}>
-                        <Route path="/paciente/dashboard" element={<>Dashboard</>} />
+                        <Route path="/paciente/dashboard" element={<DashboardPatient />} />
                         <Route path="/paciente/dashboard/settings" element={<>Settings</>} />
                         <Route path="/paciente/datos-diagnostico" element={<>Datos Diagnostico</>} />
                         <Route path="/paciente/historial-citas" element={<>Historial Citas</>} />

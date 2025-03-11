@@ -35,5 +35,8 @@ export const NavigationItemSelectedStyles: SxProps = {
 
 export const NavigationItemStylesCSS: CSSProperties = {
     ...AnchorStyles.anchor,
+    marginBottom: "0.5rem",
+    paddingLeft: "5.5px",
+    overflow: "hidden",
     color: "#f1f1f1"
 };

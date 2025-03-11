@@ -2,6 +2,7 @@ package com.healthcare.domain.service;
 
 import com.healthcare.domain.dto.request.ScheduleRequest;
 import com.healthcare.domain.dto.response.ScheduleResponse;
+import com.healthcare.domain.exceptions.InvalidDataException;
 import com.healthcare.domain.exceptions.MedicNotFoundException;
 import com.healthcare.domain.exceptions.NotFoundInDatabaseException;
 import com.healthcare.domain.model.entity.Medic;
@@ -30,6 +31,17 @@ public class ScheduleServiceImpl implements IScheduleService {
     @Transactional
     public ResponseEntity<?> createSchedule(Long medicId, ScheduleRequest scheduleRequest) {
         Medic medic = getMedic(medicId);
+
+        boolean existSchedule = scheduleRepository.
+                existsByMedicIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualAndStartTimeLessThanEqualAndEndTimeGreaterThanEqual(
+                medicId,
+                scheduleRequest.getStartDate(), scheduleRequest.getEndDate(),
+                scheduleRequest.getStartTime(), scheduleRequest.getEndTime()
+        );
+
+        if(existSchedule) {
+            throw new InvalidDataException("El médico ya tiene un horario en este rango de fechas");
+        }
 
         Schedule schedule = new Schedule(scheduleRequest, medic);
         scheduleRepository.save(schedule);

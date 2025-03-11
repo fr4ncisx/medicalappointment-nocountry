@@ -1,13 +1,16 @@
 package com.healthcare.domain.controller;
 
-import com.healthcare.domain.dto.request.PatientRequestDTO;
+import com.healthcare.domain.dto.request.PatientRequest;
+import com.healthcare.domain.dto.request.PatientRequestUpdate;
 import com.healthcare.domain.service.IPatientService;
+import com.healthcare.domain.utils.Response;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,7 +32,7 @@ public class PatientController {
     }
     
     @PostMapping
-    public ResponseEntity<?> createPatient(@RequestBody @Valid PatientRequestDTO patientDTO) {
+    public ResponseEntity<?> createPatient(@RequestBody @Valid PatientRequest patientDTO) {
         return patientService.createPatient(patientDTO);
     }
 
@@ -37,5 +40,12 @@ public class PatientController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePatient(@PathVariable Long id) {
         return patientService.deletePatient(id);
+    }
+
+    @PreAuthorize("hasAnyRole({'ADMIN', 'PACIENTE'})")
+    @PutMapping("/{patientId}")
+    public ResponseEntity<Map<String, String>> editPatient(@PathVariable Long patientId, @RequestBody @Valid PatientRequestUpdate patient) {
+        patientService.edit(patientId, patient);
+        return ResponseEntity.ok(Response.create("Paciente editado exitosamente"));
     }
 }

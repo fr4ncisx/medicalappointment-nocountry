@@ -12,12 +12,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MedicRequest{
+public class MedicRequestUpdate{
     @NotNull @NotBlank private String name;
     @NotNull @NotBlank private String lastname;
     @NotNull @NotBlank private String description;
     @NotNull @NotBlank private String state;
-    @NotNull @NotBlank private String documentId;
     @NotNull private Gender gender;
     @NotNull private Speciality speciality;
     @NotNull @NotBlank private String phone;

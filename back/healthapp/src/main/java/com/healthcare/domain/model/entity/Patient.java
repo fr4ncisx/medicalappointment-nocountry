@@ -1,6 +1,6 @@
 package com.healthcare.domain.model.entity;
 
-import com.healthcare.domain.dto.request.PatientRequestDTO;
+import com.healthcare.domain.dto.request.PatientRequest;
 import com.healthcare.domain.model.enums.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -41,7 +41,7 @@ public class Patient {
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DiagnosticImages> diagnosticImages;
     
-    public Patient(PatientRequestDTO patientDTO) {
+    public Patient(PatientRequest patientDTO) {
         this.firstName = patientDTO.getFirstName();
         this.lastName = patientDTO.getLastName();
         this.documentId = patientDTO.getDocumentId();

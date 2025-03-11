@@ -1,6 +1,9 @@
 package com.healthcare.domain.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import com.healthcare.domain.dto.request.UserRequestUpdate;
+import com.healthcare.domain.utils.Response;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
 import com.healthcare.domain.dto.response.UserResponseDTO;
 import com.healthcare.domain.service.IUserService;
@@ -10,9 +13,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Map;
 
 
 @RequiredArgsConstructor
@@ -27,6 +29,12 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> getUserDetails(@RequestParam String email, HttpServletRequest request) {
         var response = userService.getUser(email, request);
         return ResponseEntity.ok(response);
-    }    
+    }
 
+    @PreAuthorize("hasAnyRole({'ADMIN','MEDICO','PACIENTE'})")
+    @PutMapping("{id}")
+    public ResponseEntity<Map<String, String>> editUser(@PathVariable Long id, @RequestBody @Valid UserRequestUpdate user, HttpServletRequest request) {
+        userService.edit(id, user, request);
+        return ResponseEntity.ok(Response.create("Usuario editado exitosamente"));
+    }
 }

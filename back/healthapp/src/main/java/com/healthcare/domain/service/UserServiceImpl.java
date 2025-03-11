@@ -42,8 +42,12 @@ public class UserServiceImpl implements IUserService {
         if(!userEmail.equals(user.getEmail())){
             throw new AuthorizationDeniedException("No se pueden editar los datos de otros usuarios");
         }
-        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        encodePassword(user, userRequest.getPassword());
         userRepository.save(user);
+    }
+
+    private void encodePassword(User u, String rawPassword){
+        u.setPassword(passwordEncoder.encode(rawPassword));
     }
 
     private User assertUserNotNull(Long id){

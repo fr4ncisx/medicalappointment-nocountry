@@ -25,6 +25,7 @@ public class AdminSeeder implements CommandLineRunner{
     @Value("${admin.password}")
     private String password;
 
+    @Transactional
     @Override
     public void run(String... args) throws Exception {
         if(adminRepository.count() == 0){
@@ -32,7 +33,6 @@ public class AdminSeeder implements CommandLineRunner{
         }
     }
 
-    @Transactional
     public void createAdminUser(final String email, final String password){
         Assert.notNull(email, "Email is null");
         Assert.notNull(password, "Password is null");

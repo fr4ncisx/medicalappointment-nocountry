@@ -1,12 +1,12 @@
 package com.healthcare.domain.service;
 
-import com.healthcare.domain.dto.request.ScheduleRequestDTO;
+import com.healthcare.domain.dto.request.ScheduleRequest;
 import org.springframework.http.ResponseEntity;
 
 public interface IScheduleService {
-    ResponseEntity<?> createSchedule(Long medicId, ScheduleRequestDTO scheduleRequestDTO);
+    ResponseEntity<?> createSchedule(Long medicId, ScheduleRequest scheduleRequest);
     ResponseEntity<?> getAllSchedulesByMedicId(Long medicId);
     ResponseEntity<?> getScheduleById(Long scheduleId);
-    ResponseEntity<?> updateSchedule(Long scheduleId, ScheduleRequestDTO scheduleRequestDTO);
+    ResponseEntity<?> updateSchedule(Long scheduleId, ScheduleRequest scheduleRequest);
     ResponseEntity<?> deleteSchedule(Long scheduleId);
 }

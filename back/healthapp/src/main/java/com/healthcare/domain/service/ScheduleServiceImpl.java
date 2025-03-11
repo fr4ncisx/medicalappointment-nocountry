@@ -1,13 +1,14 @@
 package com.healthcare.domain.service;
 
-import com.healthcare.domain.dto.request.ScheduleRequestDTO;
-import com.healthcare.domain.dto.response.ScheduleResponseDTO;
+import com.healthcare.domain.dto.request.ScheduleRequest;
+import com.healthcare.domain.dto.response.ScheduleResponse;
 import com.healthcare.domain.exceptions.MedicNotFoundException;
 import com.healthcare.domain.exceptions.NotFoundInDatabaseException;
 import com.healthcare.domain.model.entity.Medic;
 import com.healthcare.domain.model.entity.Schedule;
 import com.healthcare.domain.repository.MedicRepository;
 import com.healthcare.domain.repository.ScheduleRepository;
+import com.healthcare.domain.utils.Response;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -28,19 +29,14 @@ public class ScheduleServiceImpl implements IScheduleService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> createSchedule(Long medicId, ScheduleRequestDTO scheduleRequestDTO) {
+    public ResponseEntity<?> createSchedule(Long medicId, ScheduleRequest scheduleRequest) {
         Medic medic = medicRepository.findById(medicId)
                 .orElseThrow(() -> new MedicNotFoundException("Médico no encontrado"));
 
-        Schedule schedule = new Schedule(scheduleRequestDTO, medic);
+        Schedule schedule = new Schedule(scheduleRequest, medic);
         scheduleRepository.save(schedule);
 
-        ScheduleResponseDTO scheduleResponseDTO = modelMapper.map(schedule, ScheduleResponseDTO.class);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                "message", "Horario creado con éxito",
-                "schedule", scheduleResponseDTO
-        ));
+        return ResponseEntity.status(HttpStatus.CREATED).body(Response.create("message", "Horario creado con éxito"));
     }
 
     @Override
@@ -48,17 +44,17 @@ public class ScheduleServiceImpl implements IScheduleService {
         Medic medic = medicRepository.findById(medicId)
                 .orElseThrow(() -> new MedicNotFoundException("Médico no encontrado"));
 
-        List<Schedule> schedules = scheduleRepository.findByMedicId(medic.getId());
+        List<Schedule> schedules = medic.getSchedules();
 
         if(schedules.isEmpty()) {
             throw new NotFoundInDatabaseException("No se encontraron horarios para este médico");
         }
 
-        List<ScheduleResponseDTO> scheduleResponseDTOS = schedules.stream()
-                .map(schedule -> modelMapper.map(schedule, ScheduleResponseDTO.class))
+        List<ScheduleResponse> scheduleResponses = schedules.stream()
+                .map(schedule -> modelMapper.map(schedule, ScheduleResponse.class))
                 .toList();
 
-        return ResponseEntity.ok(Map.of("schedule", scheduleResponseDTOS));
+        return ResponseEntity.ok(scheduleResponses);
     }
 
     @Override
@@ -66,31 +62,32 @@ public class ScheduleServiceImpl implements IScheduleService {
         Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new NotFoundInDatabaseException("Horario no encontrado"));
 
-        ScheduleResponseDTO scheduleResponseDTO = modelMapper.map(schedule, ScheduleResponseDTO.class);
+        ScheduleResponse scheduleResponse = modelMapper.map(schedule, ScheduleResponse.class);
 
-        return ResponseEntity.ok(Map.of("schedule", scheduleResponseDTO));
+        return ResponseEntity.ok(Map.of("schedule", scheduleResponse));
     }
 
     @Override
     @Transactional
-    public ResponseEntity<?> updateSchedule(Long scheduleId, ScheduleRequestDTO scheduleRequestDTO) {
+    public ResponseEntity<?> updateSchedule(Long scheduleId, ScheduleRequest scheduleRequest) {
         Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new NotFoundInDatabaseException("Horario no encontrado"));
 
-        Schedule updatedSchedule = new Schedule(scheduleRequestDTO);
+        Schedule updatedSchedule = new Schedule(scheduleRequest, schedule.getMedic());
         updatedSchedule.setId(schedule.getId());
 
         scheduleRepository.save(updatedSchedule);
 
-        ScheduleResponseDTO scheduleResponseDTO = modelMapper.map(updatedSchedule, ScheduleResponseDTO.class);
+        ScheduleResponse scheduleResponse = modelMapper.map(updatedSchedule, ScheduleResponse.class);
 
         return ResponseEntity.ok(Map.of(
                 "message", "Horario actualizado con éxito",
-                "schedule", scheduleResponseDTO
+                "schedule", scheduleResponse
         ));
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> deleteSchedule(Long scheduleId) {
         Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new NotFoundInDatabaseException("Horario no encontrado"));

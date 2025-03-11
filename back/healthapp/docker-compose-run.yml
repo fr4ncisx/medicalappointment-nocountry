@@ -1,24 +1,24 @@
 
 services:
   healthapp:
-    image: dockerfrancisx/healthapp:v1.0.0 ## USE MOST RECENT VERSION!
+    image: dockerfrancisx/healthapp:v1.10 ## USE MOST RECENT VERSION! https://hub.docker.com/r/dockerfrancisx/healthapp/tags
     ports: 
       - "8080:8080"
     environment:
-      DB_URL: jdbc:mysql://(URL:PORT)/healthapp?createDatabaseIfNotExist=true
-      MYSQL_USER: ## MYSQL USER
-      MYSQL_PASSWORD: ## MYSQL PASSWORD
+      DB_URL: jdbc:mysql://mysql:3306/healthapp
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ## INSERT FROM READ BELOW MYSQL_ROOT_PASSWORD
       HIBERNATE_DDL: update
       LOG_SQL: false
       FORMAT_SQL: false
       SECRET_KEY: ## YOUR SECRET KEY TO CREATE A JWT
       TOKEN_EXPIRATION_TIME: 60
-      JWT_ISSUER: ## JWT SIGN ANY NAME
-      CLOUDINARY_URL: ## CLOUDINARY API CREDENTIALS
+      JWT_ISSUER: HealthAppIssuer
+      CLOUDINARY_URL: not_needed
       DEPLOY_FRONTEND_IP: ## FRONTEND IP
       LOCALHOST_URL: http://localhost:8080
-      ADMIN_EMAIL: ## ADMIN EMAIL
-      ADMIN_PASSWORD: ## ADMIN PASSWORD     
+      ADMIN_EMAIL: ## ADMIN EMAIL FOR LOGIN WITH ROLE ADMIN
+      ADMIN_PASSWORD: ## ADMIN PASSWORD
     restart: always
     depends_on:
       - mysql

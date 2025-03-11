@@ -12,6 +12,7 @@ interface Actions {
     setUserData: (data: UserData) => void,
     saveToken: (token: string) => void,
     getUserDashboardURL: () => string,
+    closeSession: () => void
 }
 
 type UserStoreType = UserStoreState & Actions;
@@ -48,15 +49,17 @@ const userApi: StateCreator<UserStoreType> =
                 }
             }
             return "/";
+        },
+        closeSession: () => {
+            localStorage.clear();
         }
     });
 
 export const useUserStore = create(
-    persist
-        (userApi,
-            {
-                name: 'user-storage',
-                partialize: (state) => ({ userData: state.userData })
-            }
-        )
+    persist(userApi,
+        {
+            name: 'user-storage',
+            partialize: (state) => ({ userData: state.userData })
+        }
+    )
 );

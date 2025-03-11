@@ -12,22 +12,22 @@ import io.swagger.v3.oas.models.servers.Server;
 @Configuration
 public class SwaggerConfig {
 
-    @Value("${swagger.deployUrl}")
-    private String deployUrl;
-    @Value("${swagger.localhostUrl}")
-    private String localhostUrl;
+        @Value("${swagger.deployUrl}")
+        private String deployUrl;
+        @Value("${swagger.localhostUrl}")
+        private String localhostUrl;
 
-    @Bean
-    OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .addServersItem(new Server().url(localhostUrl).description("Deploy server"))
-                .addServersItem(new Server().url(deployUrl).description("Frontend server"))
-                .components(new Components()
-                        .addSecuritySchemes("bearer-key",
-                                new SecurityScheme()
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer")
-                                        .bearerFormat("JWT")))
-                .addSecurityItem(new SecurityRequirement().addList("bearer-key"));
-    }
+        @Bean
+        OpenAPI customOpenAPI() {
+                return new OpenAPI()
+                                .addServersItem(new Server().url(deployUrl).description("Deploy server"))
+                                .addServersItem(new Server().url(localhostUrl).description("Local server"))
+                                .components(new Components()
+                                                .addSecuritySchemes("bearer-key",
+                                                                new SecurityScheme()
+                                                                                .type(SecurityScheme.Type.HTTP)
+                                                                                .scheme("bearer")
+                                                                                .bearerFormat("JWT")))
+                                .addSecurityItem(new SecurityRequirement().addList("bearer-key"));
+        }
 }

@@ -16,6 +16,7 @@ services:
       JWT_ISSUER: HealthAppIssuer
       CLOUDINARY_URL: not_needed
       DEPLOY_FRONTEND_IP: ## FRONTEND IP
+      DEPLOY_BACKEND_IP: ## THIS MIGHT BE LOCALHOST:8080 (As it's running local)
       LOCALHOST_URL: http://localhost:8080
       ADMIN_EMAIL: ## ADMIN EMAIL FOR LOGIN WITH ROLE ADMIN
       ADMIN_PASSWORD: ## ADMIN PASSWORD

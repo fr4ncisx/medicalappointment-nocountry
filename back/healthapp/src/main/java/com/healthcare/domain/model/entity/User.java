@@ -1,6 +1,6 @@
 package com.healthcare.domain.model.entity;
 
-import com.healthcare.domain.dto.request.UserRequestDTO;
+import com.healthcare.domain.dto.request.UserRequest;
 import com.healthcare.domain.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,7 +29,7 @@ public class User {
     @OneToOne(mappedBy = "user")
     private Patient patient;
 
-    public User(UserRequestDTO userDTO,String encodedPassword, Role role) {
+    public User(UserRequest userDTO,String encodedPassword, Role role) {
         this.email = userDTO.getEmail();
         this.password = encodedPassword;
         this.role = role;

@@ -1,7 +1,7 @@
 package com.healthcare.domain.controller;
 
 import com.healthcare.domain.dto.request.MedicationsRequestDTO;
-import com.healthcare.domain.dto.response.MedicationsResponseDTO;
+import com.healthcare.domain.dto.response.MedicationsResponse;
 import com.healthcare.domain.service.IMedicationService;
 import com.healthcare.domain.utils.Response;
 
@@ -47,7 +47,7 @@ public class MedicationController {
 
     @PreAuthorize("hasAnyRole({'ADMIN','MEDICO'})")
     @GetMapping("{patientId}")
-    public ResponseEntity<List<MedicationsResponseDTO>>getMedications(@PathVariable Long patientId){
+    public ResponseEntity<List<MedicationsResponse>>getMedications(@PathVariable Long patientId){
         var responseBody = medicationService.getAll(patientId);
         return ResponseEntity.ok(responseBody);
     }

@@ -1,7 +1,7 @@
 package com.healthcare.domain.service;
 
 import com.healthcare.domain.dto.request.MedicationsRequestDTO;
-import com.healthcare.domain.dto.response.MedicationsResponseDTO;
+import com.healthcare.domain.dto.response.MedicationsResponse;
 import com.healthcare.domain.exceptions.NotFoundInDatabaseException;
 import com.healthcare.domain.model.entity.Medications;
 import com.healthcare.domain.model.entity.Patient;
@@ -49,12 +49,12 @@ public class MedicationServiceImpl implements IMedicationService {
     }
 
     @Override
-    public List<MedicationsResponseDTO> getAll(Long patientId) {
+    public List<MedicationsResponse> getAll(Long patientId) {
         var patient = getPatient(patientId);
         var getMeds = patient.getMedications();
         if (!getMeds.isEmpty()) {
             return getMeds.stream()
-                    .map(m -> modelMapper.map(m, MedicationsResponseDTO.class))
+                    .map(m -> modelMapper.map(m, MedicationsResponse.class))
                     .toList();
         }
         throw new NotFoundInDatabaseException("La lista de medicamentos está vacía");

@@ -1,7 +1,7 @@
 package com.healthcare.domain.service;
 
 import com.healthcare.domain.dto.request.UserRequestUpdate;
-import com.healthcare.domain.dto.response.UserResponseDTO;
+import com.healthcare.domain.dto.response.UserResponse;
 import com.healthcare.domain.exceptions.NotFoundInDatabaseException;
 import com.healthcare.domain.model.entity.User;
 import com.healthcare.domain.repository.UserRepository;
@@ -24,14 +24,14 @@ public class UserServiceImpl implements IUserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
-    public UserResponseDTO getUser(String email, HttpServletRequest request) {
+    public UserResponse getUser(String email, HttpServletRequest request) {
         var user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundInDatabaseException("El usuario no se encontró"));
         var tokenEmail = getEmailFromToken(request);
         if(!user.getEmail().equals(tokenEmail)){
             throw new AuthorizationDeniedException("No se pueden ver los datos de otros usuarios");
         }
-        return modelMapper.map(user, UserResponseDTO.class);
+        return modelMapper.map(user, UserResponse.class);
     }
 
     @Transactional

@@ -5,7 +5,7 @@ import com.healthcare.domain.utils.Response;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
-import com.healthcare.domain.dto.response.UserResponseDTO;
+import com.healthcare.domain.dto.response.UserResponse;
 import com.healthcare.domain.service.IUserService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +26,7 @@ public class UserController {
 
     @PreAuthorize("hasAnyRole({'ADMIN','MEDICO','PACIENTE'})")
     @GetMapping
-    public ResponseEntity<UserResponseDTO> getUserDetails(@RequestParam String email, HttpServletRequest request) {
+    public ResponseEntity<UserResponse> getUserDetails(@RequestParam String email, HttpServletRequest request) {
         var response = userService.getUser(email, request);
         return ResponseEntity.ok(response);
     }

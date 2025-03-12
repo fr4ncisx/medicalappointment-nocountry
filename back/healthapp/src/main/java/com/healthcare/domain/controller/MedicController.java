@@ -4,15 +4,13 @@ import com.healthcare.domain.dto.request.MedicRequest;
 import com.healthcare.domain.dto.request.MedicRequestUpdate;
 import com.healthcare.domain.service.IMedicService;
 import com.healthcare.domain.utils.Response;
-
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Map;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 
 @RequiredArgsConstructor

@@ -2,15 +2,15 @@ import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import { ReactNode } from 'react';
-import { CustomTableStyles } from './CustomTableStyles';
 
 interface Props {
   children: ReactNode
+  tableWithTabs?: boolean
 }
 
-export default function CustomTable({ children }: Props) {
+export default function CustomTable({ children, tableWithTabs = false }: Props) {
   return (
-    <TableContainer component={Paper} sx={CustomTableStyles.container}>
+    <TableContainer component={Paper} sx={{ borderTopLeftRadius: tableWithTabs ? "0" : "10" }}>
       <Table>
         {children}
       </Table>

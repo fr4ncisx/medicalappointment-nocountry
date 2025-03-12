@@ -18,7 +18,7 @@ export const MEDIC_LINKS: NavigationItemData[] = [
         icon: <EventNoteIcon />
     },
     {
-        to: "/medico/historial-medico-pacientes",
+        to: "/medico/gestionar-pacientes",
         ariaLabel: "navegar al historial medico de los pacientes",
         titulo: "Gestionar Pacientes",
         icon: <PermContactCalendarIcon />

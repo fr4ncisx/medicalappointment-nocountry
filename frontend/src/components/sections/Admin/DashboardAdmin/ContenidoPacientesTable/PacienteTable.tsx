@@ -6,7 +6,7 @@ import { PacientesHeaders } from "./PacientesHeaders";
 
 export const PacienteTable = () => {
     return (
-        <CustomTable>
+        <CustomTable tableWithTabs>
             <CustomTableHeader>
                 <PacientesHeaders />
             </CustomTableHeader>

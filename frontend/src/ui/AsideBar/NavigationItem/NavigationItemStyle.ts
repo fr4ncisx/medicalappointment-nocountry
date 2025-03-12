@@ -3,7 +3,7 @@ import { CSSProperties } from "react";
 
 export const NavigationItemStyles: ObjectStyles = {
     item: {
-        marginBottom: "0.5rem",
+        marginBottom: "0.3rem",
         paddingLeft: "4.5px",
         overflow: "hidden"
     },
@@ -12,11 +12,11 @@ export const NavigationItemStyles: ObjectStyles = {
         color: "#f1f1f1",
         borderRadius: "10px",
         fontSize: "0.8rem",
-        marginBottom: "0.5rem",
+        marginBottom: "0.3rem",
         paddingLeft: "4.5px",
         overflow: "hidden"
     },
-    textContainer: { marginLeft: "1rem" },
+    textContainer: { marginLeft: "0.5rem" },
     text: { fontWeight: "bold", whiteSpace: "nowrap" }
 };
 

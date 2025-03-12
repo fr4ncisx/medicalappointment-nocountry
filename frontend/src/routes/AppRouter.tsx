@@ -11,6 +11,7 @@ import { DoctorDetails } from "@components/sections/MedicosDisponibles/DoctorDet
 import { DashboardAdmin } from "@components/sections/Admin/DashboardAdmin/DashboardAdmin";
 import { DashboardPatient } from "@components/sections/DashboardPatient/DashboardPatient";
 import { DashboardMedico } from "@components/sections/Medico/DashboardMedico/DashboardMedico";
+import { GestionarPacientes } from "@components/sections/Medico/GestionarPacientes/GestionarPacientes";
 
 export const AppRouter = () => {
     return (
@@ -35,7 +36,7 @@ export const AppRouter = () => {
                     <Route element={<MedicoGuard />}>
                         <Route path="/medico/dashboard" element={<DashboardMedico />} />
                         <Route path="/medico/historial-citas" element={<>Historial Citas</>} />
-                        <Route path="/medico/historial-medico-pacientes" element={<>Historial Medico Pacientes</>} />
+                        <Route path="/medico/gestionar-pacientes" element={<GestionarPacientes />} />
                         <Route path="/medico/agenda" element={<>Agenda</>} />
                     </Route>
                 </Route>

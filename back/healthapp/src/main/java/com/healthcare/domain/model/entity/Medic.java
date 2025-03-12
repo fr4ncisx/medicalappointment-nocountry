@@ -1,25 +1,14 @@
 package com.healthcare.domain.model.entity;
 
-import java.util.List;
-
 import com.healthcare.domain.dto.request.MedicRequest;
 import com.healthcare.domain.model.enums.Gender;
 import com.healthcare.domain.model.enums.Speciality;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -47,6 +36,8 @@ public class Medic {
     private User user;
     @OneToOne @JoinColumn(name = "image_id")
     private Image image;
+    @OneToMany(mappedBy = "medic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Schedule> schedules;
     
     public Medic(MedicRequest medic) {
         this.name = medic.getName();

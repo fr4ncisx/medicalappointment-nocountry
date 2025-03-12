@@ -11,7 +11,7 @@ import { DoctorDetails } from "@components/sections/MedicosDisponibles/DoctorDet
 import { DashboardAdmin } from "@components/sections/DashboardAdmin/DashboardAdmin";
 import { DashboardPatient } from "@components/sections/DashboardPatient/DashboardPatient";
 import { DashboardMedico } from "@components/sections/DashboardMedico/DashboardMedico";
-
+import { ContenidoDatosDiagnostico } from "@components/sections/DashboardPatient/ContenidoDatosDiagnostico/ContenidoDatosDiagnostico"
 import { ContenidoHistorialCitas } from "@components/sections/DashboardPatient/ContenidoHistorialCitas/ContenidoHistorialCitas";
 
 export const AppRouter = () => {
@@ -27,7 +27,7 @@ export const AppRouter = () => {
                     <Route element={<PacienteGuard />}>
                         <Route path="/paciente/dashboard" element={<DashboardPatient />} />
                         <Route path="/paciente/dashboard/settings" element={<>Settings</>} />
-                        <Route path="/paciente/datos-diagnostico" element={<>Datos Diagnostico</>} />
+                        <Route path="/paciente/datos-diagnostico" element={<ContenidoDatosDiagnostico />} />
                         <Route path="/paciente/historial-citas" element={<ContenidoHistorialCitas />} />
                         <Route path="/paciente/agendar-cita" element={<AgendaTuCitaSection />} />
                     </Route>

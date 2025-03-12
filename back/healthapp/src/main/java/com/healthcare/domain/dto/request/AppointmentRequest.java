@@ -1,14 +1,13 @@
 package com.healthcare.domain.dto.request;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
-import com.healthcare.domain.model.enums.Status;
-
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +17,6 @@ public class AppointmentRequest {
     private LocalDate date;
     @NotNull
     private LocalTime time;
-    @NotNull
-    private Status status;
-
+    @NotBlank @NotNull
+    private String visitReason;
 }

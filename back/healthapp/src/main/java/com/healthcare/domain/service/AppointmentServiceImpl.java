@@ -6,13 +6,12 @@ import com.healthcare.domain.exceptions.*;
 import com.healthcare.domain.model.entity.Appointment;
 import com.healthcare.domain.model.entity.Medic;
 import com.healthcare.domain.model.entity.Patient;
+import com.healthcare.domain.model.entity.Schedule;
 import com.healthcare.domain.model.enums.Status;
 import com.healthcare.domain.repository.AppointmentRepository;
 import com.healthcare.domain.repository.MedicRepository;
 import com.healthcare.domain.repository.PatientRepository;
-
 import lombok.RequiredArgsConstructor;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
-import static com.healthcare.domain.model.enums.Status.CONFIRMADA;
 
 @RequiredArgsConstructor
 @Service
@@ -34,123 +30,108 @@ public class AppointmentServiceImpl implements IAppointmentService {
     private final PatientRepository patientRepository;
     private final ModelMapper modelMapper;
 
+    private static final String MESSAGE = "message";
+    private static final String APPOINTMENT = "appointment";
+    private static final String APPOINTMENTS = "appointments";
+
     @Override
     @Transactional
     public ResponseEntity<?> scheduleAppointment(Long patientId, Long medicId, AppointmentRequest appointmentRequest) {
-        Optional<Medic> medicOpt = medicRepository.findById(medicId);
-        Optional<Patient> patientOpt = patientRepository.findById(patientId);
-
-        if (medicOpt.isEmpty()) {
-            throw new MedicNotFoundException("Médico no encontrado");
-        }
-
-        if (patientOpt.isEmpty()) {
-            throw new PatientNotFoundException("Paciente no encontrado");
-        }
-
-        /*
-         * boolean isAvailable =
-         * appointmentRepository.findByMedicIdAndDateTime(medicId,)
-         * .filter(appointment ->
-         * !appointment.getStatus().equals(Status.CANCELADA)).isEmpty();
-         * 
-         * if (!isAvailable) {
-         * throw new
-         * MedicScheduleConflictException("El médico ya tiene una cita en este horario"
-         * );
-         * }
-         */
-
-        Appointment appointment = Appointment.builder()
-                .medic(medicOpt.get())
-                .patient(patientOpt.get())
-                .date(appointmentRequest.getDate())
-                .time(appointmentRequest.getTime())
-                .status(CONFIRMADA)
-                .build();
-
+        var medic = getMedicFromRepository(medicId);
+        var patient = getPatientFromRepository(patientId);
+        var medicSchedule = medic.getSchedules();
+        var medicAppointments = medic.getAppointment();
+        isTimeTaken(medicAppointments, appointmentRequest);
+        outOfTimeRangeValidation(medicSchedule, appointmentRequest);
+        Appointment appointment = new Appointment(appointmentRequest, medic, patient);
         appointmentRepository.save(appointment);
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                "message", "Cita agendada correctamente",
-                "appointment", modelMapper.map(appointment, AppointmentResponse.class)));
+                MESSAGE, "Cita agendada correctamente",
+                APPOINTMENT, modelMapper.map(appointment, AppointmentResponse.class)));
     }
+
+
 
     @Override
     @Transactional
     public ResponseEntity<?> updateAppointment(Long appointmentId, AppointmentRequest appointmentRequest) {
-        Optional<Appointment> appointmentOpt = appointmentRepository.findById(appointmentId);
-
-        if (appointmentOpt.isEmpty()) {
-            throw new AppointmentNotFoundException("Cita no encontrada");
-        }
-
-        Appointment appointment = appointmentOpt.get();
-
-        /*if (appointment.getDateTime().equals(newDateTime)) {
-            throw new AppointmentDateConflictException("La nueva fecha debe ser diferente a la actual");
-        }*/
-
-        if (appointment.getStatus().equals(Status.CANCELADA)) {
-            throw new CancelledAppointmentException("No se puede modificar una cita cancelada");
-        }
-
-        /*boolean isAvailable = appointmentRepository
-                .findByMedicIdAndDateTime(appointment.getMedic().getId(), newDateTime).isEmpty();
-
-        if (!isAvailable) {
-            throw new MedicScheduleConflictException("El médico ya tiene una cita en este horario");
-        }*/
-
-        //appointment.setDateTime(newDateTime);
+        var appointment = getAppointment(appointmentId);
+        checkIfNotConfirmed(appointment);
+        var appointmentList = appointment.getMedic().getAppointment();
+        var mediSchedule = appointment.getMedic().getSchedules();
+        isTimeTaken(appointmentList, appointmentRequest);
+        outOfTimeRangeValidation(mediSchedule, appointmentRequest);
+        modelMapper.map(appointmentRequest,appointment);
         appointmentRepository.save(appointment);
-
         return ResponseEntity.status(HttpStatus.OK).body(Map.of(
-                "message", "Cita reagendada correctamente",
-                "appointment", modelMapper.map(appointment, AppointmentResponse.class)));
+                MESSAGE, "Cita reagendada correctamente",
+                APPOINTMENT, modelMapper.map(appointment, AppointmentResponse.class)));
     }
 
     @Override
     @Transactional
     public ResponseEntity<?> cancelAppointment(Long appointmentId) {
-        Optional<Appointment> appointmentOpt = appointmentRepository.findById(appointmentId);
-
-        if (appointmentOpt.isEmpty()) {
-            throw new AppointmentNotFoundException("Cita no encontrada");
-        }
-
-        Appointment appointment = appointmentOpt.get();
-
-        if (appointment.getStatus().equals(Status.CANCELADA)) {
-            throw new CancelledAppointmentException("La cita ya esta cancelada");
-        }
-
+        var appointment = getAppointment(appointmentId);
+        checkIfNotConfirmed(appointment);
         appointment.setStatus(Status.CANCELADA);
         appointmentRepository.save(appointment);
-
         return ResponseEntity.status(HttpStatus.OK).body(Map.of(
-                "message", "Cita cancelada correctamente",
-                "appointment", modelMapper.map(appointment, AppointmentResponse.class)));
+                MESSAGE, "Cita cancelada correctamente",
+                APPOINTMENT, modelMapper.map(appointment, AppointmentResponse.class)));
     }
 
     @Override
     public ResponseEntity<?> getAppointmentsByPatient(Long patientId) {
-        Optional<Patient> patientOpt = patientRepository.findById(patientId);
+        getPatientFromRepository(patientId);
+        var response = validateListAndGetResponse(getListOfAppointments(patientId));
+        return ResponseEntity.ok(Map.of(
+                MESSAGE, "Lista de citas médicas",
+                APPOINTMENTS, response));
+    }
 
-        if (patientOpt.isEmpty()) {
-            throw new PatientNotFoundException("Paciente no encontrado");
-        }
+    private List<Appointment> getListOfAppointments(Long patientId) {
+        return appointmentRepository.findByPatientId(patientId);
+    }
 
-        List<Appointment> appointments = appointmentRepository.findByPatientId(patientId);
-
+    private List<AppointmentResponse> validateListAndGetResponse(List<Appointment> appointments){
         if (appointments.isEmpty()) {
             throw new AppointmentNotFoundException("El paciente no tiene citas médicas registradas");
         }
-
-        List<AppointmentResponse> response = appointments.stream()
+        return appointments.stream()
                 .map(a -> modelMapper.map(a, AppointmentResponse.class)).toList();
+    }
 
-        return ResponseEntity.ok(Map.of(
-                "message", "Lista de citas médicas",
-                "appointments", response));
+    private Medic getMedicFromRepository(Long id) {
+        return medicRepository.findById(id).orElseThrow(() -> new MedicNotFoundException("Médico no encontrado"));
+    }
+
+    private Patient getPatientFromRepository(Long id) {
+        return patientRepository.findById(id).orElseThrow(() -> new PatientNotFoundException("Paciente no encontrado"));
+    }
+
+    public Appointment getAppointment(Long appointmentId) {
+        return appointmentRepository.findById(appointmentId).orElseThrow(() -> new AppointmentNotFoundException("Cita no encontrada"));
+    }
+
+    public void checkIfNotConfirmed(Appointment appointment) {
+        if (appointment.getStatus().equals(Status.CANCELADA) || appointment.getStatus().equals(Status.COMPLETADA)) {
+            throw new CancelledAppointmentException("No se puede modificar una cita " + appointment.getStatus().toString().toLowerCase());
+        }
+    }
+
+    private void isTimeTaken(List<Appointment> medicAppointments, AppointmentRequest appointmentRequest) {
+        boolean timeIsTaken = medicAppointments.stream()
+                .anyMatch(t -> t.getTime().equals(appointmentRequest.getTime()));
+        if (timeIsTaken) {
+            throw new InvalidDataException("Ese horario ya esta asignado");
+        }
+    }
+
+    private void outOfTimeRangeValidation(List<Schedule> medicSchedule, AppointmentRequest appointmentRequest) {
+        medicSchedule.stream()
+                .filter(sch -> !appointmentRequest.getTime().isAfter(sch.getEndTime()))
+                .filter(sch -> !appointmentRequest.getTime().isBefore(sch.getStartTime()))
+                .findAny()
+                .orElseThrow(() -> new InvalidDataException("No se puede guardar una cita en ese horario"));
     }
 }

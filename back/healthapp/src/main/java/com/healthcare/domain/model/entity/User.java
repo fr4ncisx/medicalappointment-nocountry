@@ -29,8 +29,8 @@ public class User {
     @OneToOne(mappedBy = "user")
     private Patient patient;
 
-    public User(UserRequest userDTO,String encodedPassword, Role role) {
-        this.email = userDTO.getEmail();
+    public User(UserRequest userRequest,String encodedPassword, Role role) {
+        this.email = userRequest.getEmail();
         this.password = encodedPassword;
         this.role = role;
     }

@@ -1,5 +1,5 @@
 import { Grid2 } from "@mui/material";
-import { DashboardAdminStyles } from "./DashboardAdminStyles";
+import { DashboardAdminStyles } from "./DashboardAdminStyles.ts";
 import { AsideBar } from "@ui/AsideBar/AsideBar";
 import { ADMIN_LINKS } from "./ADMIN_LINKS.tsx";
 import { AdminMainContent } from "./AdminMainContent/AdminMainContent.tsx";

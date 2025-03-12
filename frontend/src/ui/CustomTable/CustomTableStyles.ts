@@ -1,9 +1,6 @@
 import { ObjectStyles } from "@tipos/component";
 
 export const CustomTableStyles: ObjectStyles = {
-    container: {
-        borderTopLeftRadius: "0"
-    },
     header: {
         backgroundColor: "#198751",
         borderBottom: "1px solid #c1c1c1",

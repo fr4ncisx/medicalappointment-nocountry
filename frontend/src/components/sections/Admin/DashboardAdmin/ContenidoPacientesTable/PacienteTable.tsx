@@ -1,17 +1,17 @@
 import CustomTable from "@ui/CustomTable/CustomTable";
 import { CustomTableBody } from "@ui/CustomTable/CustomTableBody";
 import { CustomTableHeader } from "@ui/CustomTable/CustomTableHeader";
-import { MedicosRows } from "./MedicosRows";
-import { MedicosHeaders } from "./MedicosHeaders";
+import { PacientesRows } from "./PacienteRows";
+import { PacientesHeaders } from "./PacientesHeaders";
 
-export const MedicoTable = () => {
+export const PacienteTable = () => {
     return (
-        <CustomTable>
+        <CustomTable tableWithTabs>
             <CustomTableHeader>
-                <MedicosHeaders />
+                <PacientesHeaders />
             </CustomTableHeader>
             <CustomTableBody>
-                <MedicosRows />
+                <PacientesRows />
             </CustomTableBody>
         </CustomTable>
     );

@@ -1,7 +1,4 @@
-import { SxProps } from "@mui/material";
 import { ObjectStyles } from "@tipos/component";
-import { AnchorStyles } from "@ui/Anchor/AnchorStyles";
-import { CSSProperties } from "react";
 
 export const AsideBarStyles: ObjectStyles = {
     asideBar: {
@@ -17,26 +14,4 @@ export const AsideBarStyles: ObjectStyles = {
     list: {
         padding: "10px"
     }
-};
-
-export const NavigationItemStyles: SxProps = {
-    marginBottom: "0.5rem",
-    paddingLeft: "4.5px",
-    overflow: "hidden"
-}
-
-export const NavigationItemSelectedStyles: SxProps = {
-    backgroundColor: "#198751",
-    color: "#f1f1f1",
-    borderRadius: "10px",
-    fontSize: "1rem",
-    ...NavigationItemStyles
-};
-
-export const NavigationItemStylesCSS: CSSProperties = {
-    ...AnchorStyles.anchor,
-    marginBottom: "0.5rem",
-    paddingLeft: "5.5px",
-    overflow: "hidden",
-    color: "#f1f1f1"
 };

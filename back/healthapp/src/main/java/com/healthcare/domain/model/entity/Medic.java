@@ -30,7 +30,7 @@ public class Medic {
     @Enumerated(EnumType.STRING)
     private Speciality speciality;
     private String phone;
-    @OneToMany(mappedBy = "medic", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "medic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Appointment> appointment;
     @OneToOne(cascade = CascadeType.ALL) @JoinColumn(name = "user_id")
     private User user;

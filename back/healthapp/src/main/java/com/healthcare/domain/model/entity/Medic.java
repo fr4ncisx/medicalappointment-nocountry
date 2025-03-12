@@ -39,7 +39,7 @@ public class Medic {
     @OneToMany(mappedBy = "medic", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Schedule> schedules;
     
-    public Medic(MedicRequest medic) {
+    public Medic(MedicRequest medic, User user) {
         this.name = medic.getName();
         this.lastName = medic.getLastname();
         this.description = medic.getDescription();
@@ -48,5 +48,6 @@ public class Medic {
         this.gender = medic.getGender();
         this.speciality = medic.getSpeciality();
         this.phone = medic.getPhone();
+        this.user = user;
     }
 }

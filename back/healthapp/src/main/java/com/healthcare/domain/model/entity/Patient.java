@@ -41,7 +41,7 @@ public class Patient {
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DiagnosticImages> diagnosticImages;
     
-    public Patient(PatientRequest patientDTO) {
+    public Patient(PatientRequest patientDTO, User user) {
         this.firstName = patientDTO.getFirstName();
         this.lastName = patientDTO.getLastName();
         this.documentId = patientDTO.getDocumentId();
@@ -50,5 +50,6 @@ public class Patient {
         this.phone = patientDTO.getPhone();
         this.address = patientDTO.getAddress();
         this.emergencyContactInfo = patientDTO.getEmergencyContactInfo();
+        this.user = user;
     }
 }

@@ -1,6 +1,6 @@
 import { Grid2, List } from "@mui/material";
 import { NavigationItemData } from "@tipos/component";
-import { NavigationItem } from "./NavigationItem";
+import { NavigationItem } from "./NavigationItem/NavigationItem";
 import { AsideBarStyles } from "./AsideBarStyles";
 import { CloseAsideBarButton } from "./CloseAsideBarButton";
 import { useState } from "react";

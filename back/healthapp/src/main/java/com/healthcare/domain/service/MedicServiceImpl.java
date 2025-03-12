@@ -3,15 +3,22 @@ package com.healthcare.domain.service;
 import com.healthcare.domain.dto.request.MedicRequest;
 import com.healthcare.domain.dto.request.MedicRequestUpdate;
 import com.healthcare.domain.dto.response.MedicResponse;
-import com.healthcare.domain.exceptions.*;
+import com.healthcare.domain.dto.response.MedicUserResponse;
+import com.healthcare.domain.exceptions.DuplicatedEntryEx;
+import com.healthcare.domain.exceptions.MedicDeletionException;
+import com.healthcare.domain.exceptions.MedicNotFoundException;
+import com.healthcare.domain.exceptions.NotFoundInDatabaseException;
 import com.healthcare.domain.model.entity.Medic;
+import com.healthcare.domain.model.entity.User;
+import com.healthcare.domain.model.enums.Role;
 import com.healthcare.domain.repository.AppointmentRepository;
 import com.healthcare.domain.repository.MedicRepository;
+import com.healthcare.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +31,9 @@ public class MedicServiceImpl implements IMedicService {
 
     private final MedicRepository medicRepository;
     private final AppointmentRepository appointmentRepository;
+    private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public ResponseEntity<?> getAllMedics(String speciality, String gender, String state) {
@@ -68,19 +77,22 @@ public class MedicServiceImpl implements IMedicService {
     @Override
     @Transactional
     public ResponseEntity<?> createMedic(MedicRequest medicRequest) {
-        if (medicRequest == null) {
-            throw new InvalidDataException("El cuerpo de la solicitud es obligatorio");
-        }
-
+        var userRequest = medicRequest.getUser();
         if (medicRepository.existsByDocumentId(medicRequest.getDocumentId())) {
             throw new DuplicatedEntryEx("Médico ya registrado");
         }
+        if(userRepository.existsByEmail(userRequest.getEmail())){
+            throw new DuplicatedEntryEx("El correo ya esta asociado a una cuenta");
+        }
 
-        Medic medic = new Medic(medicRequest);
+        var userEncodedPassword = passwordEncoder.encode(userRequest.getPassword());
+        User user = new User(userRequest, userEncodedPassword, Role.MEDICO);
+        Medic medic = new Medic(medicRequest, user);
+
         medicRepository.save(medic);
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                 "message", "Médico creado con éxito",
-                "medic", medicRequest));
+                "medic", modelMapper.map(medic, MedicUserResponse.class)));
     }
 
     @Override
@@ -96,7 +108,7 @@ public class MedicServiceImpl implements IMedicService {
         medicRepository.delete(medic);
         return ResponseEntity.ok(Map.of("message", "Médico eliminado con éxito"));
     }
-    
+
     @Transactional
     @Override
     public void edit(Long id, MedicRequestUpdate medicRequest) {

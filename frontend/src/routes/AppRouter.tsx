@@ -8,9 +8,9 @@ import { AdminGuard } from "@routes/AdminGuard";
 import { MedicoGuard } from "@routes/MedicoGuard";
 import { NotFound } from "@components/layout/NotFound/NotFound";
 import { DoctorDetails } from "@components/sections/MedicosDisponibles/DoctorDetails/doctorDetails";
-import { DashboardAdmin } from "@components/sections/DashboardAdmin/DashboardAdmin";
+import { DashboardAdmin } from "@components/sections/Admin/DashboardAdmin/DashboardAdmin";
 import { DashboardPatient } from "@components/sections/DashboardPatient/DashboardPatient";
-import { DashboardMedico } from "@components/sections/DashboardMedico/DashboardMedico";
+import { DashboardMedico } from "@components/sections/Medico/DashboardMedico/DashboardMedico";
 
 export const AppRouter = () => {
     return (

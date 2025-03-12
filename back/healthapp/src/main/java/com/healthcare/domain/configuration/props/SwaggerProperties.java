@@ -1,4 +1,4 @@
-package com.healthcare.domain.configuration;
+package com.healthcare.domain.configuration.props;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

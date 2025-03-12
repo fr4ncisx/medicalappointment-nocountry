@@ -3,9 +3,8 @@ package com.healthcare.domain.service;
 import com.healthcare.domain.dto.request.PatientRequest;
 import com.healthcare.domain.dto.request.PatientRequestUpdate;
 import com.healthcare.domain.dto.request.UserRequest;
-import com.healthcare.domain.dto.response.PatientResponseDTO;
+import com.healthcare.domain.dto.response.PatientResponse;
 import com.healthcare.domain.exceptions.DuplicatedEntryEx;
-import com.healthcare.domain.exceptions.InvalidDataException;
 import com.healthcare.domain.exceptions.NotFoundInDatabaseException;
 import com.healthcare.domain.exceptions.PatientNotFoundException;
 import com.healthcare.domain.model.entity.Patient;
@@ -21,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -36,8 +36,8 @@ public class PatientServiceImpl implements IPatientService{
     @Override
     public ResponseEntity<?> getAllPatients(){
         List<Patient> patients = patientRepository.findAll();
-        List<PatientResponseDTO> response = patients.stream()
-                .map(patientEntity -> modelMapper.map(patientEntity, PatientResponseDTO.class))
+        List<PatientResponse> response = patients.stream()
+                .map(patientEntity -> modelMapper.map(patientEntity, PatientResponse.class))
                 .toList();
         if (response.isEmpty()) {
             throw new NotFoundInDatabaseException("Pacientes no encontrados");
@@ -50,23 +50,23 @@ public class PatientServiceImpl implements IPatientService{
     public ResponseEntity<?> getPatientById(Long id){
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new PatientNotFoundException("Paciente no encontrado"));
-        var patientDTO = modelMapper.map(patient, PatientResponseDTO.class);
+        var patientDTO = modelMapper.map(patient, PatientResponse.class);
         return ResponseEntity.ok(Map.of("patient", patientDTO));
     }
 
     @Override
     @Transactional
-    public ResponseEntity<?> createPatient(PatientRequest patientDTO) {
-        assertValidation(patientDTO);
-        UserRequest userDTO = patientDTO.getUser();        
-        Patient patient = new Patient(patientDTO);
-        User user = new User(userDTO, encodePassword(userDTO.getPassword()), Role.PACIENTE);
-        userRepository.save(user);
-        patient.setUser(user);
+    public ResponseEntity<?> createPatient(PatientRequest patientRequest) {
+        assertValidation(patientRequest);
+
+        UserRequest userRequest = patientRequest.getUser();
+        User user = new User(userRequest, encodePassword(userRequest.getPassword()), Role.PACIENTE);
+        Patient patient = new Patient(patientRequest, user);
+
         patientRepository.save(patient);
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                 "message", "Paciente creado con éxito",
-                "patient", patientDTO));
+                "patient", modelMapper.map(patient, PatientResponse.class)));
     }
 
     @Override
@@ -90,15 +90,16 @@ public class PatientServiceImpl implements IPatientService{
                 .orElseThrow(() -> new PatientNotFoundException("Paciente no encontrado"));
     }
 
-    private void assertValidation(PatientRequest patientDTO) {
-        if (patientDTO == null) {
-            throw new InvalidDataException("El cuerpo de la solicitud es obligatorio");
-        }
-        if (patientRepository.existsByDocumentId(patientDTO.getDocumentId())) {
+    private void assertValidation(PatientRequest patientRequest) {
+        if (patientRepository.existsByDocumentId(patientRequest.getDocumentId())) {
             throw new DuplicatedEntryEx("Paciente ya registrado");
         }
-        if (userRepository.existsByEmail(patientDTO.getUser().getEmail())) {
+        if (userRepository.existsByEmail(patientRequest.getUser().getEmail())) {
             throw new DuplicatedEntryEx("El correo ya esta asociado a una cuenta");
+        }
+        var isAnAdult = patientRequest.getBirthDate().plusYears(18);
+        if(isAnAdult.isAfter(LocalDate.now())){
+            throw new IllegalArgumentException("El paciente no es mayor de edad");
         }
     }
 

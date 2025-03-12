@@ -12,6 +12,8 @@ import { DashboardAdmin } from "@components/sections/Admin/DashboardAdmin/Dashbo
 import { DashboardPatient } from "@components/sections/DashboardPatient/DashboardPatient";
 import { DashboardMedico } from "@components/sections/Medico/DashboardMedico/DashboardMedico";
 import { GestionarPacientes } from "@components/sections/Medico/GestionarPacientes/GestionarPacientes";
+import { ContenidoDatosDiagnostico } from "@components/sections/DashboardPatient/ContenidoDatosDiagnostico/ContenidoDatosDiagnostico"
+import { ContenidoHistorialCitas } from "@components/sections/DashboardPatient/ContenidoHistorialCitas/ContenidoHistorialCitas";
 
 export const AppRouter = () => {
     return (
@@ -26,8 +28,8 @@ export const AppRouter = () => {
                     <Route element={<PacienteGuard />}>
                         <Route path="/paciente/dashboard" element={<DashboardPatient />} />
                         <Route path="/paciente/dashboard/settings" element={<>Settings</>} />
-                        <Route path="/paciente/datos-diagnostico" element={<>Datos Diagnostico</>} />
-                        <Route path="/paciente/historial-citas" element={<>Historial Citas</>} />
+                        <Route path="/paciente/datos-diagnostico" element={<ContenidoDatosDiagnostico />} />
+                        <Route path="/paciente/historial-citas" element={<ContenidoHistorialCitas />} />
                         <Route path="/paciente/agendar-cita" element={<AgendaTuCitaSection />} />
                     </Route>
                     <Route element={<AdminGuard />}>

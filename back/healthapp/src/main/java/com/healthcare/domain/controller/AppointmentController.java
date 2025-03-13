@@ -3,6 +3,7 @@ package com.healthcare.domain.controller;
 import com.healthcare.domain.dto.request.AppointmentRequest;
 import com.healthcare.domain.service.IAppointmentService;
 
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +21,7 @@ public class AppointmentController {
     @PreAuthorize("hasAnyRole({'ADMIN','MEDICO', 'PACIENTE'})")
     @PostMapping("/schedule")
     public ResponseEntity<?> scheduleAppointment(@RequestParam Long patientId, @RequestParam Long medicId,
-            @RequestBody @Valid AppointmentRequest appointmentRequest) {
+            @RequestBody @Valid AppointmentRequest appointmentRequest) throws MessagingException {
         return appointmentService.scheduleAppointment(
                 patientId,
                 medicId, appointmentRequest);

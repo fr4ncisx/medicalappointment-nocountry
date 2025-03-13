@@ -11,12 +11,14 @@ import com.healthcare.domain.model.enums.Status;
 import com.healthcare.domain.repository.AppointmentRepository;
 import com.healthcare.domain.repository.MedicRepository;
 import com.healthcare.domain.repository.PatientRepository;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.context.Context;
 
 import java.util.List;
 import java.util.Map;
@@ -29,6 +31,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
     private final MedicRepository medicRepository;
     private final PatientRepository patientRepository;
     private final ModelMapper modelMapper;
+    private final MailService mailService;
 
     private static final String MESSAGE = "message";
     private static final String APPOINTMENT = "appointment";
@@ -36,7 +39,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> scheduleAppointment(Long patientId, Long medicId, AppointmentRequest appointmentRequest) {
+    public ResponseEntity<?> scheduleAppointment(Long patientId, Long medicId, AppointmentRequest appointmentRequest) throws MessagingException {
         var medic = getMedicFromRepository(medicId);
         var patient = getPatientFromRepository(patientId);
         var medicSchedule = medic.getSchedules();
@@ -45,6 +48,20 @@ public class AppointmentServiceImpl implements IAppointmentService {
         outOfTimeRangeValidation(medicSchedule, appointmentRequest);
         Appointment appointment = new Appointment(appointmentRequest, medic, patient);
         appointmentRepository.save(appointment);
+
+        Context context = new Context();
+        context.setVariable("patientName", patient.getFirstName());
+        context.setVariable("appointmentDate", appointmentRequest.getDate());
+        context.setVariable("appointmentTime", appointmentRequest.getTime());
+        context.setVariable("medicName", medic.getName());
+
+        mailService.sendMail(
+                new String[]{appointment.getPatient().getUser().getEmail()},
+                "Confirmación de Cita",
+                "appointment-confirmation",
+                context
+        );
+
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                 MESSAGE, "Cita agendada correctamente",
                 APPOINTMENT, modelMapper.map(appointment, AppointmentResponse.class)));

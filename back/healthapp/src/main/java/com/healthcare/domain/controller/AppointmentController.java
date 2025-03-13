@@ -26,7 +26,6 @@ public class AppointmentController {
                 patientId,
                 medicId, appointmentRequest);
     }
-
     @PreAuthorize("hasAnyRole({'ADMIN','MEDICO', 'PACIENTE'})")
     @PutMapping("/update/{appointmentId}")
     public ResponseEntity<?> updateAppointment(
@@ -39,7 +38,7 @@ public class AppointmentController {
 
     @PreAuthorize("hasAnyRole({'ADMIN','MEDICO', 'PACIENTE'})")
     @PutMapping("/cancel/{appointmentId}")
-    public ResponseEntity<?> cancelAppointment(@PathVariable Long appointmentId) {
+    public ResponseEntity<?> cancelAppointment(@PathVariable Long appointmentId) throws MessagingException {
         return appointmentService.cancelAppointment(appointmentId);
     }
 

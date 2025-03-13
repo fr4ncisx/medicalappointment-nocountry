@@ -18,8 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.thymeleaf.context.Context;
-
 import java.util.List;
 import java.util.Map;
 
@@ -47,21 +45,9 @@ public class AppointmentServiceImpl implements IAppointmentService {
         isTimeTaken(medicAppointments, appointmentRequest);
         outOfTimeRangeValidation(medicSchedule, appointmentRequest);
         Appointment appointment = new Appointment(appointmentRequest, medic, patient);
+        String[] patientEmail = {patient.getUser().getEmail()};
+        mailService.sendMail(patientEmail, "Cita Médica: Confirmación", appointment);
         appointmentRepository.save(appointment);
-
-        Context context = new Context();
-        context.setVariable("patientName", patient.getFirstName());
-        context.setVariable("appointmentDate", appointmentRequest.getDate());
-        context.setVariable("appointmentTime", appointmentRequest.getTime());
-        context.setVariable("medicName", medic.getName());
-
-        mailService.sendMail(
-                new String[]{appointment.getPatient().getUser().getEmail()},
-                "Confirmación de Cita",
-                "appointment-confirmation",
-                context
-        );
-
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                 MESSAGE, "Cita agendada correctamente",
                 APPOINTMENT, modelMapper.map(appointment, AppointmentResponse.class)));
@@ -87,11 +73,14 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> cancelAppointment(Long appointmentId) {
+    public ResponseEntity<?> cancelAppointment(Long appointmentId) throws MessagingException {
         var appointment = getAppointment(appointmentId);
         checkIfNotConfirmed(appointment);
         appointment.setStatus(Status.CANCELADA);
         appointmentRepository.save(appointment);
+        var patient = appointment.getPatient();
+        String[] patientEmail = {patient.getUser().getEmail()};
+        mailService.sendMail(patientEmail, "Cita médica: Su cita fue cancelada", appointment);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of(
                 MESSAGE, "Cita cancelada correctamente",
                 APPOINTMENT, modelMapper.map(appointment, AppointmentResponse.class)));

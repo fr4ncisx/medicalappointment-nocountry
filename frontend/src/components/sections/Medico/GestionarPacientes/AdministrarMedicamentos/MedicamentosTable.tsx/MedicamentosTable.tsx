@@ -1,20 +1,20 @@
 import CustomTable from "@ui/CustomTable/CustomTable";
-import { CustomTableHeader } from "@ui/CustomTable/CustomTableHeader";
-import { GestionarPacientesRows } from "../ContenidoGestionarPacientesTable/GestionarPacientesRows";
 import { CustomTableBody } from "@ui/CustomTable/CustomTableBody";
-import { GestionarPacientesHeaders } from "../ContenidoGestionarPacientesTable/GestionarPacientesHeaders";
-import { useEffect, useState } from "react";
+import { MedicamentosHeaders } from "./MedicamentosHeaders";
+import { MedicamentosRows } from "./MedicamentosRows";
+import { CustomTableHeader } from "@ui/CustomTable/CustomTableHeader";
 import { StatusTable } from "@ui/StatusTable/StatusTable";
-import { CustomError, PacientesResponse } from "@tipos/types";
-import { PacienteData } from "@tipos/backendTypes";
+import { useEffect, useState } from "react";
 import { useUserStore } from "@store/user.store";
+import { CustomError } from "@tipos/types";
+import { MedicacionData } from "@tipos/backendTypes";
 
 interface Props {
-    handleShowAdminstrarMedicamentosPaciente: (showAdministrarMedicamentos: boolean, id?: number) => void
+    pacienteId: number | null
 }
 
-export const GestionarPacientesTable = ({ handleShowAdminstrarMedicamentosPaciente }: Props) => {
-    const [pacientes, setPacientes] = useState<PacienteData[]>([]);
+export const MedicamentosTable = ({pacienteId}: Props) => {
+    const [medicamentos, setMedicamentos] = useState<MedicacionData[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<CustomError | null>(null);
     const getToken = useUserStore(state => state.getToken);
@@ -22,16 +22,16 @@ export const GestionarPacientesTable = ({ handleShowAdminstrarMedicamentosPacien
     useEffect(() => {
         setLoading(true);
         const token = getToken();
-        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/patient`, { method: "GET", headers: { 'Authorization': `${token}` } })
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/medication/${pacienteId}`, { method: "GET", headers: { 'Authorization': `${token}` } })
             .then(async (response) => {
                 const responseBody = await response.json();
                 if (!response.ok) {
-                    throw new Error(responseBody.error);
+                    throw new Error(responseBody.error || responseBody.ERROR);
                 }
                 return responseBody;
             })
-            .then((result: PacientesResponse) => {
-                setPacientes(result.patients);
+            .then((result: MedicacionData[]) => {
+                setMedicamentos(result);
             })
             .catch((error) => {
                 let errorMsg = error.message;
@@ -52,19 +52,18 @@ export const GestionarPacientesTable = ({ handleShowAdminstrarMedicamentosPacien
     if (loading) {
         return <StatusTable color="info" label="Cargando..." />;
     }
-
     return !error && !loading
         ? (
             <CustomTable>
                 <CustomTableHeader>
-                    <GestionarPacientesHeaders />
+                    <MedicamentosHeaders />
                 </CustomTableHeader>
                 <CustomTableBody>
-                    <GestionarPacientesRows pacientes={pacientes} rowFunction={handleShowAdminstrarMedicamentosPaciente} />
+                    <MedicamentosRows rows={medicamentos} />
                 </CustomTableBody>
             </CustomTable>
         )
         : (
             <StatusTable color="error" label={error?.description || ""} />
-        )
+        );
 }

@@ -1,6 +1,7 @@
 package com.healthcare.domain.service;
 
 import com.healthcare.domain.dto.request.AppointmentRequest;
+import com.healthcare.domain.dto.response.AppointmentListResponse;
 import com.healthcare.domain.dto.response.AppointmentResponse;
 import com.healthcare.domain.exceptions.*;
 import com.healthcare.domain.model.entity.Appointment;
@@ -99,12 +100,12 @@ public class AppointmentServiceImpl implements IAppointmentService {
         return appointmentRepository.findByPatientId(patientId);
     }
 
-    private List<AppointmentResponse> validateListAndGetResponse(List<Appointment> appointments){
+    private List<AppointmentListResponse> validateListAndGetResponse(List<Appointment> appointments){
         if (appointments.isEmpty()) {
             throw new AppointmentNotFoundException("El paciente no tiene citas médicas registradas");
         }
         return appointments.stream()
-                .map(a -> modelMapper.map(a, AppointmentResponse.class)).toList();
+                .map(a -> modelMapper.map(a, AppointmentListResponse.class)).toList();
     }
 
     private Medic getMedicFromRepository(Long id) {

@@ -11,10 +11,11 @@ import java.time.LocalTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AppointmentResponse {
+public class AppointmentListResponse {
     private Long id;
     private LocalDate date;
     private LocalTime time;
     private String visitReason;
     private Status status;
+    private MedicAppointmentsResponse medic;
 }

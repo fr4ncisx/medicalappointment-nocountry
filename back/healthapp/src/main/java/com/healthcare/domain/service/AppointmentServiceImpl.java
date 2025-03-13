@@ -11,13 +11,13 @@ import com.healthcare.domain.model.enums.Status;
 import com.healthcare.domain.repository.AppointmentRepository;
 import com.healthcare.domain.repository.MedicRepository;
 import com.healthcare.domain.repository.PatientRepository;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +29,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
     private final MedicRepository medicRepository;
     private final PatientRepository patientRepository;
     private final ModelMapper modelMapper;
+    private final MailService mailService;
 
     private static final String MESSAGE = "message";
     private static final String APPOINTMENT = "appointment";
@@ -36,7 +37,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> scheduleAppointment(Long patientId, Long medicId, AppointmentRequest appointmentRequest) {
+    public ResponseEntity<?> scheduleAppointment(Long patientId, Long medicId, AppointmentRequest appointmentRequest) throws MessagingException {
         var medic = getMedicFromRepository(medicId);
         var patient = getPatientFromRepository(patientId);
         var medicSchedule = medic.getSchedules();
@@ -44,6 +45,8 @@ public class AppointmentServiceImpl implements IAppointmentService {
         isTimeTaken(medicAppointments, appointmentRequest);
         outOfTimeRangeValidation(medicSchedule, appointmentRequest);
         Appointment appointment = new Appointment(appointmentRequest, medic, patient);
+        String[] patientEmail = {patient.getUser().getEmail()};
+        mailService.sendMail(patientEmail, "Cita Médica: Confirmación", appointment);
         appointmentRepository.save(appointment);
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                 MESSAGE, "Cita agendada correctamente",
@@ -70,11 +73,14 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
     @Override
     @Transactional
-    public ResponseEntity<?> cancelAppointment(Long appointmentId) {
+    public ResponseEntity<?> cancelAppointment(Long appointmentId) throws MessagingException {
         var appointment = getAppointment(appointmentId);
         checkIfNotConfirmed(appointment);
         appointment.setStatus(Status.CANCELADA);
         appointmentRepository.save(appointment);
+        var patient = appointment.getPatient();
+        String[] patientEmail = {patient.getUser().getEmail()};
+        mailService.sendMail(patientEmail, "Cita médica: Su cita fue cancelada", appointment);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of(
                 MESSAGE, "Cita cancelada correctamente",
                 APPOINTMENT, modelMapper.map(appointment, AppointmentResponse.class)));

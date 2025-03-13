@@ -1,32 +1,41 @@
-
+## FIRST COMMANDO TO RUN YOUR DOCKER-COMPOSE IF USING THE SAME FILENAME
+## docker-compose -f "docker-compose-run.yml" up
+## USE THIS COMMAND TO STOP ALL CONTAINERS, DELETE THEM AND REMOVE ALL VOLUMES
+## docker-compose -f "docker-compose-run.yml" down -v
+## IF U WANT VOLUMES TO PERSIST remove -v after down
+## docker-compose -f "docker-compose-run.yml" down
 services:
   healthapp:
-    image: dockerfrancisx/healthapp:v1.10 ## USE MOST RECENT VERSION! https://hub.docker.com/r/dockerfrancisx/healthapp/tags
+    container_name: springboot
+    image: dockerfrancisx/healthapp:v1.21 ## USE MOST RECENT VERSION! https://hub.docker.com/r/dockerfrancisx/healthapp/tags
     ports: 
       - "8080:8080"
     environment:
-      DB_URL: jdbc:mysql://mysql:3306/healthapp
+      DB_URL: jdbc:mysql://mysql/healthapp
       MYSQL_USER: root
       MYSQL_PASSWORD: ## INSERT FROM READ BELOW MYSQL_ROOT_PASSWORD
       HIBERNATE_DDL: update
       LOG_SQL: false
       FORMAT_SQL: false
       SECRET_KEY: ## YOUR SECRET KEY TO CREATE A JWT
-      TOKEN_EXPIRATION_TIME: 60
+      TOKEN_EXPIRATION_TIME: 900000
       JWT_ISSUER: HealthAppIssuer
       CLOUDINARY_URL: not_needed
-      DEPLOY_FRONTEND_IP: ## FRONTEND IP
-      DEPLOY_BACKEND_IP: ## THIS MIGHT BE LOCALHOST:8080 (As it's running local)
-      LOCALHOST_URL: http://localhost:8080
+      DEPLOY_FRONTEND_IP: ## FRONTEND IP (IF RUNNING LOCAL COPY DEPLOY FRONTEND LOCALHOST)
+      DEPLOY_BACKEND_IP: ## THIS MIGHT BE LOCALHOST:8080 IF RUNNING LOCAL
+      DEPLOY_LOCALHOST_FRONTEND: http://localhost:5173
+      BACKEND_LOCALHOST: http://localhost:8080
       ADMIN_EMAIL: ## ADMIN EMAIL FOR LOGIN WITH ROLE ADMIN
       ADMIN_PASSWORD: ## ADMIN PASSWORD
+      SMTP_EMAIL: ## AN EMAIL FOR SENDING EMAILS
+      SMTP_PASSWORD: ## SMTP APPLICATION PASSWORD (NOT LOGIN PASSWORD)
     restart: always
     depends_on:
       - mysql
 
   mysql:
     container_name: mysql-db
-    image: mysql:8.0
+    image: mysql:9.0
     ports: 
       - "3308:3306"
     environment:

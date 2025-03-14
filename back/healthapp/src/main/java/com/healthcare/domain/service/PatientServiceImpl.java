@@ -17,6 +17,7 @@ import com.healthcare.domain.service.interfaces.IPatientService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -36,6 +37,9 @@ public class PatientServiceImpl implements IPatientService{
     private final ModelMapper modelMapper;
     private final BCryptPasswordEncoder passwordEncoder;
     private final MailService mailService;
+
+    @Value("${email.sendEmail}")
+    private boolean sendEmail;
 
     @Override
     public ResponseEntity<?> getAllPatients(){
@@ -67,9 +71,11 @@ public class PatientServiceImpl implements IPatientService{
         User user = new User(userRequest, encodePassword(userRequest.getPassword()), Role.PACIENTE);
         Patient patient = new Patient(patientRequest, user);
 
-        patientRepository.save(patient);
-        String email = patient.getUser().getEmail();
-        mailService.sendMailRegister(email, "Confirmación de usuario registrado", patient);
+        patientRepository.save(patient);        
+        if(sendEmail){
+            String email = patient.getUser().getEmail();
+            mailService.sendMailRegister(email, "Confirmación de usuario registrado", patient);
+        }        
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                 "message", "Paciente creado con éxito",
                 "patient", modelMapper.map(patient, PatientResponse.class)));

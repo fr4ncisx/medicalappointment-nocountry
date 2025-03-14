@@ -17,6 +17,7 @@ import com.healthcare.domain.service.interfaces.IAppointmentService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -34,13 +35,16 @@ public class AppointmentServiceImpl implements IAppointmentService {
     private final ModelMapper modelMapper;
     private final MailService mailService;
 
+    @Value("${email.sendEmail}")
+    private boolean sendEmail;
     private static final String MESSAGE = "message";
     private static final String APPOINTMENT = "appointment";
     private static final String APPOINTMENTS = "appointments";
 
     @Override
     @Transactional
-    public ResponseEntity<?> scheduleAppointment(Long patientId, Long medicId, AppointmentRequest appointmentRequest) throws MessagingException {
+    public ResponseEntity<?> scheduleAppointment(Long patientId, Long medicId, AppointmentRequest appointmentRequest)
+            throws MessagingException {
         var medic = getMedicFromRepository(medicId);
         var patient = getPatientFromRepository(patientId);
         var medicSchedule = medic.getSchedules();
@@ -48,7 +52,9 @@ public class AppointmentServiceImpl implements IAppointmentService {
         outOfTimeRangeValidation(medicSchedule, appointmentRequest);
         Appointment appointment = new Appointment(appointmentRequest, medic, patient);
         appointmentRepository.save(appointment);
-        mailService.sendMail(patient.getUser().getEmail(), "Cita Médica: Confirmación", appointment);
+        if (sendEmail) {
+            mailService.sendMail(patient.getUser().getEmail(), "Cita Médica: Confirmación", appointment);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                 MESSAGE, "Cita agendada correctamente",
                 APPOINTMENT, modelMapper.map(appointment, AppointmentResponse.class)));
@@ -62,7 +68,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
         var mediSchedule = appointment.getMedic().getSchedules();
         isTimeTaken(appointment.getMedic(), appointmentRequest);
         outOfTimeRangeValidation(mediSchedule, appointmentRequest);
-        modelMapper.map(appointmentRequest,appointment);
+        modelMapper.map(appointmentRequest, appointment);
         appointmentRepository.save(appointment);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of(
                 MESSAGE, "Cita reagendada correctamente",
@@ -77,7 +83,9 @@ public class AppointmentServiceImpl implements IAppointmentService {
         appointment.setStatus(Status.CANCELADA);
         appointmentRepository.save(appointment);
         var patient = appointment.getPatient();
-        mailService.sendMail(patient.getUser().getEmail(), "Cita médica: Su cita fue cancelada", appointment);
+        if (sendEmail) {
+            mailService.sendMail(patient.getUser().getEmail(), "Cita médica: Su cita fue cancelada", appointment);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(Map.of(
                 MESSAGE, "Cita cancelada correctamente",
                 APPOINTMENT, modelMapper.map(appointment, AppointmentResponse.class)));
@@ -96,7 +104,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
         return appointmentRepository.findByPatientId(patientId);
     }
 
-    private List<AppointmentListResponse> validateListAndGetResponse(List<Appointment> appointments){
+    private List<AppointmentListResponse> validateListAndGetResponse(List<Appointment> appointments) {
         if (appointments.isEmpty()) {
             throw new AppointmentNotFoundException("El paciente no tiene citas médicas registradas");
         }
@@ -113,19 +121,22 @@ public class AppointmentServiceImpl implements IAppointmentService {
     }
 
     public Appointment getAppointment(Long appointmentId) {
-        return appointmentRepository.findById(appointmentId).orElseThrow(() -> new AppointmentNotFoundException("Cita no encontrada"));
+        return appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new AppointmentNotFoundException("Cita no encontrada"));
     }
 
     public void checkIfNotConfirmed(Appointment appointment) {
         if (appointment.getStatus().equals(Status.CANCELADA) || appointment.getStatus().equals(Status.COMPLETADA)) {
-            throw new CancelledAppointmentException("No se puede modificar una cita " + appointment.getStatus().toString().toLowerCase());
+            throw new CancelledAppointmentException(
+                    "No se puede modificar una cita " + appointment.getStatus().toString().toLowerCase());
         }
     }
 
     private void isTimeTaken(Medic medic, AppointmentRequest appointmentRequest) {
         var medicAppointments = medic.getAppointment();
         medicAppointments.stream()
-                .filter(t -> !t.getTime().equals(appointmentRequest.getTime()) && !t.getDate().equals(appointmentRequest.getDate()))
+                .filter(t -> !t.getTime().equals(appointmentRequest.getTime())
+                        && !t.getDate().equals(appointmentRequest.getDate()))
                 .findAny()
                 .orElseThrow(() -> new InvalidDataException("Ese horario ya esta asignado"));
     }

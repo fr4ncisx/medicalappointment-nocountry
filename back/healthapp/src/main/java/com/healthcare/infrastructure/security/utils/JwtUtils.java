@@ -5,6 +5,10 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.UUID;
 
+import com.healthcare.domain.exceptions.NotFoundInDatabaseException;
+import com.healthcare.domain.model.entity.User;
+import com.healthcare.domain.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,8 +27,11 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.healthcare.infrastructure.dto.request.UserAuthenticated;
 
+@RequiredArgsConstructor
 @Component
 public class JwtUtils {
+
+    private final UserRepository userRepository;
 
     @Value("${jwt.secret.key}")
     private String secretKey;
@@ -66,6 +73,13 @@ public class JwtUtils {
         } catch (JWTVerificationException ex) {
             throw new JWTVerificationException("Error en la verificación del token", ex);
         }
+    }
+
+    public User getUserDetails(String token){
+        var decodedJWT = validateUserToken(token);
+        String userEmail = decodedJWT.getSubject();
+        return userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new NotFoundInDatabaseException("El email no se encontró en la base de datos"));
     }
 
     public <U extends UserDetails> void loadSecurityContext(U user) {

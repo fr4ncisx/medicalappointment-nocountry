@@ -127,11 +127,10 @@ public class AppointmentServiceImpl implements IAppointmentService {
     }
 
     private void isTimeTaken(List<Appointment> medicAppointments, AppointmentRequest appointmentRequest) {
-        boolean timeIsTaken = medicAppointments.stream()
-                .anyMatch(t -> t.getTime().equals(appointmentRequest.getTime()));
-        if (timeIsTaken) {
-            throw new InvalidDataException("Ese horario ya esta asignado");
-        }
+        medicAppointments.stream()
+                .filter(t -> !t.getTime().equals(appointmentRequest.getTime()) && !t.getDate().equals(appointmentRequest.getDate()))
+                .findAny()
+                .orElseThrow(() -> new InvalidDataException("Ese horario ya esta asignado"));
     }
 
     private void outOfTimeRangeValidation(List<Schedule> medicSchedule, AppointmentRequest appointmentRequest) {

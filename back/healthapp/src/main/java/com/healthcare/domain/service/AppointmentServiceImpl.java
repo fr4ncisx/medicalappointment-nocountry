@@ -12,6 +12,8 @@ import com.healthcare.domain.model.enums.Status;
 import com.healthcare.domain.repository.AppointmentRepository;
 import com.healthcare.domain.repository.MedicRepository;
 import com.healthcare.domain.repository.PatientRepository;
+import com.healthcare.domain.service.interfaces.IAppointmentService;
+
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -42,28 +44,23 @@ public class AppointmentServiceImpl implements IAppointmentService {
         var medic = getMedicFromRepository(medicId);
         var patient = getPatientFromRepository(patientId);
         var medicSchedule = medic.getSchedules();
-        var medicAppointments = medic.getAppointment();
-        isTimeTaken(medicAppointments, appointmentRequest);
+        isTimeTaken(medic, appointmentRequest);
         outOfTimeRangeValidation(medicSchedule, appointmentRequest);
         Appointment appointment = new Appointment(appointmentRequest, medic, patient);
-        String[] patientEmail = {patient.getUser().getEmail()};
-        mailService.sendMail(patientEmail, "Cita Médica: Confirmación", appointment);
         appointmentRepository.save(appointment);
+        mailService.sendMail(patient.getUser().getEmail(), "Cita Médica: Confirmación", appointment);
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
                 MESSAGE, "Cita agendada correctamente",
                 APPOINTMENT, modelMapper.map(appointment, AppointmentResponse.class)));
     }
-
-
 
     @Override
     @Transactional
     public ResponseEntity<?> updateAppointment(Long appointmentId, AppointmentRequest appointmentRequest) {
         var appointment = getAppointment(appointmentId);
         checkIfNotConfirmed(appointment);
-        var appointmentList = appointment.getMedic().getAppointment();
         var mediSchedule = appointment.getMedic().getSchedules();
-        isTimeTaken(appointmentList, appointmentRequest);
+        isTimeTaken(appointment.getMedic(), appointmentRequest);
         outOfTimeRangeValidation(mediSchedule, appointmentRequest);
         modelMapper.map(appointmentRequest,appointment);
         appointmentRepository.save(appointment);
@@ -80,8 +77,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
         appointment.setStatus(Status.CANCELADA);
         appointmentRepository.save(appointment);
         var patient = appointment.getPatient();
-        String[] patientEmail = {patient.getUser().getEmail()};
-        mailService.sendMail(patientEmail, "Cita médica: Su cita fue cancelada", appointment);
+        mailService.sendMail(patient.getUser().getEmail(), "Cita médica: Su cita fue cancelada", appointment);
         return ResponseEntity.status(HttpStatus.OK).body(Map.of(
                 MESSAGE, "Cita cancelada correctamente",
                 APPOINTMENT, modelMapper.map(appointment, AppointmentResponse.class)));
@@ -126,7 +122,8 @@ public class AppointmentServiceImpl implements IAppointmentService {
         }
     }
 
-    private void isTimeTaken(List<Appointment> medicAppointments, AppointmentRequest appointmentRequest) {
+    private void isTimeTaken(Medic medic, AppointmentRequest appointmentRequest) {
+        var medicAppointments = medic.getAppointment();
         medicAppointments.stream()
                 .filter(t -> !t.getTime().equals(appointmentRequest.getTime()) && !t.getDate().equals(appointmentRequest.getDate()))
                 .findAny()

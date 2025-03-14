@@ -6,7 +6,7 @@ import Menu from "./Menu/Menu";
 import SignUp from "./SignUp/SignUp";
 
 export default function ModalMenu() {
-    const modalDataOperation = useModalStore((state) => state.modalData.operation);
+    const modalDataOperation = useModalStore((state) => state.modalData.operation) || "menu";
 
     const CONTENT_MAP: Record<ModalOperation, ReactNode> = {
         "menu": <Menu />,

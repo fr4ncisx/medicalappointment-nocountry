@@ -23,10 +23,10 @@ public class MedicationController {
 
     @PreAuthorize("hasAnyRole({'ADMIN','MEDICO'})")
     @PostMapping("{patientId}")
-    public ResponseEntity<Map<String, String>> assignMedication(@PathVariable Long patientId,
+    public ResponseEntity<MedicationsResponse> assignMedication(@PathVariable Long patientId,
                                                                 @RequestBody @Valid MedicationsRequestDTO medicationsRequestDTO) {
-        medicationService.assign(patientId, medicationsRequestDTO);
-        return ResponseEntity.ok(Response.create("Medicación cargada exitosamente"));
+        var response = medicationService.assign(patientId, medicationsRequestDTO);
+        return ResponseEntity.ok(response);
     }
 
     @PreAuthorize("hasAnyRole({'ADMIN','MEDICO'})")

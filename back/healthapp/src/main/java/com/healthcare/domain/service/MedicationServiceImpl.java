@@ -24,11 +24,12 @@ public class MedicationServiceImpl implements IMedicationService {
 
     @Transactional
     @Override
-    public void assign(Long patientId, MedicationsRequestDTO medicationsRequest) {
+    public MedicationsResponse assign(Long patientId, MedicationsRequestDTO medicationsRequest) {
         var patient = getPatient(patientId);
-        var meds = new Medications(medicationsRequest, patient);
-        patient.getMedications().add(meds);
+        var savedMeds = medicationRepository.save(new Medications(medicationsRequest, patient));
+        patient.getMedications().add(savedMeds);
         patientRepository.save(patient);
+        return modelMapper.map(savedMeds, MedicationsResponse.class);
     }
 
     @Transactional

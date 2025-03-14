@@ -4,6 +4,8 @@ import com.healthcare.domain.dto.request.PatientRequest;
 import com.healthcare.domain.dto.request.PatientRequestUpdate;
 import com.healthcare.domain.service.IPatientService;
 import com.healthcare.domain.utils.Response;
+
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +34,7 @@ public class PatientController {
     }
     
     @PostMapping
-    public ResponseEntity<?> createPatient(@RequestBody @Valid PatientRequest patientDTO) {
+    public ResponseEntity<?> createPatient(@RequestBody @Valid PatientRequest patientDTO) throws MessagingException {
         return patientService.createPatient(patientDTO);
     }
 

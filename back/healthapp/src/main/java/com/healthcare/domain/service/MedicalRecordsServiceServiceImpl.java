@@ -3,7 +3,10 @@ package com.healthcare.domain.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.healthcare.domain.model.entity.User;
+import com.healthcare.infrastructure.security.utils.JwtUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -22,9 +25,11 @@ public class MedicalRecordsServiceServiceImpl implements IMedicalRecordsService 
 
     private final ModelMapper modelMapper;
     private final PatientRepository patientRepository;
+    private final JwtUtils jwtUtils;
 
     @Override
-    public List<MedicalRecordsReponse> retrieveRecords(Long patientId) {
+    public List<MedicalRecordsReponse> retrieveRecords(Long patientId, String token) {
+        validateTokenPatientId(token, patientId);
         var listOfRecords = getPatient(patientId).getMedicalRecords();
         Assert.notEmpty(listOfRecords, "No se encontró ningún historial médico");
         return listOfRecords.stream()
@@ -45,4 +50,12 @@ public class MedicalRecordsServiceServiceImpl implements IMedicalRecordsService 
         return patientOpt.orElseThrow(() -> new NotFoundInDatabaseException("Paciente no encontrado"));
     }
 
+    private void validateTokenPatientId(String token, Long patientId){
+        User loggedUser = jwtUtils.getUserDetails(token);
+        boolean userIsPatient = loggedUser.getRole().toString().equals("PACIENTE");
+        boolean userIdNotEquals = !loggedUser.getPatient().getId().equals(patientId);
+        if (userIsPatient && userIdNotEquals) {
+            throw new AuthorizationDeniedException("No está habilitado para ver historial medico de otro paciente");
+        }
+    }
 }

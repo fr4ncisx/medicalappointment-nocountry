@@ -17,5 +17,5 @@ public class AppointmentListResponse {
     private LocalTime time;
     private String visitReason;
     private Status status;
-    private MedicAppointmentsResponse medic;
+    private MedicShortResponse medic;
 }

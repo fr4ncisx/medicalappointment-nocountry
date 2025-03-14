@@ -1,6 +1,7 @@
 <div style="text-align: center;">
-  <img src="https://img.shields.io/badge/Status-Completado-brightgreen" alt="Status">
+  <img src="https://img.shields.io/badge/status-in%20development-yellow" alt="Status">
   <img src="https://img.shields.io/badge/Versión-1.0-blue" alt="Versión">
+  <img src="https://img.shields.io/github/last-commit/fr4ncisx/NoCountry-MedicalAppointment" alt="Last commit">
 </div>
 
 # Sistema de Administración de Turnos para Clínica

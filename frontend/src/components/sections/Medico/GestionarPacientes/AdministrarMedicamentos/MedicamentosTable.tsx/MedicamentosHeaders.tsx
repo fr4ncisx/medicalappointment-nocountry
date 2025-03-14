@@ -15,7 +15,7 @@ const headers = [
     },
     {
         id: "4",
-        title: ""
+        title: "",
     }
 ];
 
@@ -24,7 +24,7 @@ export const MedicamentosHeaders = () => {
         <>
             {
                 headers.map((item) => (
-                    <TableCell key={item.id} align="center" width={item.title === "" ? "430px" : ""}>{item.title}</TableCell>
+                    <TableCell key={item.id} align="center" width={item.title === "" ? "350px" : ""}>{item.title}</TableCell>
                 ))
             }
         </>

@@ -19,13 +19,13 @@ export const MedicamentosRows = ({ rows }: Props) => {
                         <TableCell align="center">{`${startDate} ${endDate}`}</TableCell>
                         <TableCell align="center" sx={{ display: "flex", gap: "1rem" }}>
                             <Button variant="contained" color="info" disableElevation>
-                                1
+                                Eliminar
                             </Button>
                             <Button variant="contained" color="warning" disableElevation>
-                                2
+                                Editar
                             </Button>
                             <Button variant="contained" color="warning" disableElevation>
-                                3
+                                Detalles
                             </Button>
                         </TableCell>
                     </TableRow>

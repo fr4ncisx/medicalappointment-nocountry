@@ -9,6 +9,7 @@ const CustomDatePickerControl = ({ data, path, uischema, label, handleChange }: 
     const rawValue = data ? data[key] : null;
     const value = rawValue ? parse(rawValue, "dd/MM/yyyy", new Date()) : null;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
     const onChange = (value: any, context: PickerChangeHandlerContext<DateValidationError>) => {
         const date = new Date(value);
         const correctDate = format(date, "dd/MM/yyyy");

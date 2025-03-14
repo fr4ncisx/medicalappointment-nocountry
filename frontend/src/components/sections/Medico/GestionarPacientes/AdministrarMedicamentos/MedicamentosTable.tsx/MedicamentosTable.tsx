@@ -11,9 +11,10 @@ import { MedicacionData } from "@tipos/backendTypes";
 
 interface Props {
     pacienteId: number | null
+    refetch: boolean
 }
 
-export const MedicamentosTable = ({pacienteId}: Props) => {
+export const MedicamentosTable = ({ pacienteId, refetch }: Props) => {
     const [medicamentos, setMedicamentos] = useState<MedicacionData[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<CustomError | null>(null);
@@ -47,7 +48,7 @@ export const MedicamentosTable = ({pacienteId}: Props) => {
                 })
             })
             .finally(() => setLoading(false));
-    }, []);
+    }, [refetch]);
 
     if (loading) {
         return <StatusTable color="info" label="Cargando..." />;

@@ -16,5 +16,4 @@ public class ScheduleRequest {
     @NotNull private LocalDate endDate;
     @NotNull private LocalTime startTime;
     @NotNull private LocalTime endTime;
-    // @NotNull private DayOfWeek dayOfWeek;
 }

@@ -1,3 +1,6 @@
 package com.healthcare.infrastructure.dto.response;
 
-public record ResponseTokenDTO(String token) {}
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public record ResponseTokenDTO(String token, String error) {}

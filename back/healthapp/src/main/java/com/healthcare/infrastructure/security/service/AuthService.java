@@ -1,7 +1,5 @@
 package com.healthcare.infrastructure.security.service;
 
-import java.util.Map;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -33,25 +31,6 @@ public class AuthService implements UserDetailsService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     /**
-     * 
-     * @param token JWT token after login
-     * @throws UsernameNotFoundException      if user was not found in database
-     * @throws BadCredentialsException        Invalid password from password matches
-     * @throws IllegalArgumentException       if user is null
-     * @throws AlgorithmMismatchException     if the algorithm stated in the token's
-     *                                        header is not equal to
-     *                                        the one defined in the
-     *                                        {@link JWTVerifier}.
-     * @throws SignatureVerificationException if the signature is invalid.
-     * @throws TokenExpiredException          if the token has expired.
-     * @throws MissingClaimException          if a claim to be verified is missing.
-     * @throws IncorrectClaimException        if a claim contained a different value
-     *                                        than the expected one.
-     * @throws JWTVerificationException
-     * 
-     */
-
-    /**
      * <p>
      * This method checks step by step calling the repository to retrieve the user
      * object
@@ -67,19 +46,19 @@ public class AuthService implements UserDetailsService {
      * @throws UsernameNotFoundException If user was not found
      * @throws BadCredentialsException   Password doesnt match user or is invalid
      */
-    public ResponseEntity<?> loginUser(RequestLoginDTO login) {
+    public ResponseEntity<ResponseTokenDTO> loginUser(RequestLoginDTO login) {
         try {
             UserAuthenticated userDetails = (UserAuthenticated) loadUserByUsername(login.email());
             passwordMatches(login, userDetails);
             loadSecurityContext(userDetails);
             String createdToken = jwtUtils.createToken(userDetails);
-            return ResponseEntity.ok(new ResponseTokenDTO(createdToken));
+            return ResponseEntity.ok(new ResponseTokenDTO(createdToken, null));
         } catch (UsernameNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("error", ex.getMessage()));
+                    .body(new ResponseTokenDTO(null, ex.getMessage()));
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", ex.getMessage()));
+                    .body(new ResponseTokenDTO(null, ex.getMessage()));
         }
     }
 

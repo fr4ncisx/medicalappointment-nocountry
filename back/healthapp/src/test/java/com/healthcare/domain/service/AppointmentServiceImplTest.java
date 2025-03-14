@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -53,11 +52,11 @@ class AppointmentServiceImplTest {
     @Test
     void testCancelAppointment() {
         when(appointmentRepository.findById(any(Long.class))).thenReturn(Optional.of(mockAppointment));
-    
+
         assertSame(Status.CANCELADA, mockAppointment.getStatus());
-    
+
         assertThrowsExactly(CancelledAppointmentException.class,
-        () -> appointmentServiceImpl.cancelAppointment(any(Long.class)));
+                () -> appointmentServiceImpl.cancelAppointment(any(Long.class)));
 
         mockAppointment.setStatus(Status.CONFIRMADA);
         assertSame(Status.CONFIRMADA, mockAppointment.getStatus());

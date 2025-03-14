@@ -8,6 +8,7 @@ class HealthappApplicationTests {
 
 	@Test
 	void contextLoads() {
+		throw new UnsupportedOperationException("Actually not doing testing in this side");
 	}
 
 }

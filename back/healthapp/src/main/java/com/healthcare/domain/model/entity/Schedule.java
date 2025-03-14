@@ -27,9 +27,6 @@ public class Schedule {
     private LocalTime startTime;
     @Column(nullable = false)
     private LocalTime endTime;
-    // @Enumerated(EnumType.STRING)
-    // @Column(nullable = false)
-    // private DayOfWeek dayOfWeek;
     @ManyToOne
     @JoinColumn(name = "medic_id", nullable = false)
     private Medic medic;
@@ -39,7 +36,6 @@ public class Schedule {
         this.endDate = scheduleRequest.getEndDate();
         this.startTime = scheduleRequest.getStartTime();
         this.endTime = scheduleRequest.getEndTime();
-        // this.dayOfWeek = scheduleRequest.getDayOfWeek();
         this.medic = medic;
     }
 
@@ -48,6 +44,5 @@ public class Schedule {
         this.endDate = scheduleRequest.getEndDate();
         this.startTime = scheduleRequest.getStartTime();
         this.endTime = scheduleRequest.getEndTime();
-        // this.dayOfWeek = scheduleRequest.getDayOfWeek();
     }
 }

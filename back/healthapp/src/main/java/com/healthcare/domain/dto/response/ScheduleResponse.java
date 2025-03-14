@@ -16,5 +16,4 @@ public class ScheduleResponse {
     private LocalDate endDate;
     private LocalTime startTime;
     private LocalTime endTime;
-    // @NotNull private DayOfWeek dayOfWeek;
 }

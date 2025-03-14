@@ -12,4 +12,6 @@ public class EmailProperties {
     private String username;
     @SuppressWarnings("unused")
     private String password;
+    @SuppressWarnings("unused")
+    private boolean sendEmail;
 }

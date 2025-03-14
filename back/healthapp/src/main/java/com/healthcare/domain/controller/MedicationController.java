@@ -2,7 +2,7 @@ package com.healthcare.domain.controller;
 
 import com.healthcare.domain.dto.request.MedicationsRequestDTO;
 import com.healthcare.domain.dto.response.MedicationsResponse;
-import com.healthcare.domain.service.IMedicationService;
+import com.healthcare.domain.service.interfaces.IMedicationService;
 import com.healthcare.domain.utils.Response;
 
 import jakarta.validation.Valid;

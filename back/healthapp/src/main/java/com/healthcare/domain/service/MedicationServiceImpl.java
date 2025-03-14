@@ -7,6 +7,8 @@ import com.healthcare.domain.model.entity.Medications;
 import com.healthcare.domain.model.entity.Patient;
 import com.healthcare.domain.repository.MedicationRepository;
 import com.healthcare.domain.repository.PatientRepository;
+import com.healthcare.domain.service.interfaces.IMedicationService;
+
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

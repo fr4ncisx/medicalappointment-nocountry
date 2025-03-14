@@ -2,7 +2,7 @@ package com.healthcare.domain.controller;
 
 import com.healthcare.domain.dto.request.PatientRequest;
 import com.healthcare.domain.dto.request.PatientRequestUpdate;
-import com.healthcare.domain.service.IPatientService;
+import com.healthcare.domain.service.interfaces.IPatientService;
 import com.healthcare.domain.utils.Response;
 
 import jakarta.mail.MessagingException;

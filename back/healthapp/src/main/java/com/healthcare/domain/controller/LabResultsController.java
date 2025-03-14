@@ -2,7 +2,7 @@ package com.healthcare.domain.controller;
 
 import com.healthcare.domain.dto.request.LabResultsRequest;
 import com.healthcare.domain.dto.response.LabResultsResponse;
-import com.healthcare.domain.service.ILabResultsService;
+import com.healthcare.domain.service.interfaces.ILabResultsService;
 import com.healthcare.domain.utils.Response;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

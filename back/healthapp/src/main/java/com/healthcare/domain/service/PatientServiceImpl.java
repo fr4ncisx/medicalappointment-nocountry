@@ -12,6 +12,7 @@ import com.healthcare.domain.model.entity.User;
 import com.healthcare.domain.model.enums.Role;
 import com.healthcare.domain.repository.PatientRepository;
 import com.healthcare.domain.repository.UserRepository;
+import com.healthcare.domain.service.interfaces.IPatientService;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;

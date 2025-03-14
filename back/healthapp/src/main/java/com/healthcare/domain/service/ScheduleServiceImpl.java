@@ -9,6 +9,7 @@ import com.healthcare.domain.model.entity.Medic;
 import com.healthcare.domain.model.entity.Schedule;
 import com.healthcare.domain.repository.MedicRepository;
 import com.healthcare.domain.repository.ScheduleRepository;
+import com.healthcare.domain.service.interfaces.IScheduleService;
 import com.healthcare.domain.utils.Response;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

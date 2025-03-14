@@ -14,6 +14,8 @@ import com.healthcare.domain.model.enums.Role;
 import com.healthcare.domain.repository.AppointmentRepository;
 import com.healthcare.domain.repository.MedicRepository;
 import com.healthcare.domain.repository.UserRepository;
+import com.healthcare.domain.service.interfaces.IMedicService;
+
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.healthcare.domain.service;
+package com.healthcare.domain.service.interfaces;
 
 import com.healthcare.domain.dto.request.UserRequestUpdate;
 import com.healthcare.domain.dto.response.UserResponse;

@@ -1,4 +1,4 @@
-package com.healthcare.domain.service;
+package com.healthcare.domain.service.interfaces;
 
 import java.util.List;
 import com.healthcare.domain.dto.request.MedicalRecordsRequest;

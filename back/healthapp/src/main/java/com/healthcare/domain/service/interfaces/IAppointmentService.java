@@ -1,4 +1,4 @@
-package com.healthcare.domain.service;
+package com.healthcare.domain.service.interfaces;
 
 import jakarta.mail.MessagingException;
 import org.springframework.http.ResponseEntity;

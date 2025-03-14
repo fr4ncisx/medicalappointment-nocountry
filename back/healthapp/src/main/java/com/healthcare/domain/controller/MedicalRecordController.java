@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.healthcare.domain.dto.request.MedicalRecordsRequest;
 import com.healthcare.domain.dto.response.MedicalRecordsReponse;
-import com.healthcare.domain.service.IMedicalRecordsService;
+import com.healthcare.domain.service.interfaces.IMedicalRecordsService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

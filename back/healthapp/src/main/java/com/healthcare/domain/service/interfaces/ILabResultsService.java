@@ -1,4 +1,4 @@
-package com.healthcare.domain.service;
+package com.healthcare.domain.service.interfaces;
 
 import com.healthcare.domain.dto.request.LabResultsRequest;
 import com.healthcare.domain.dto.response.LabResultsResponse;

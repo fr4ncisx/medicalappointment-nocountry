@@ -1,7 +1,7 @@
 package com.healthcare.domain.controller;
 
 import com.healthcare.domain.dto.request.AppointmentRequest;
-import com.healthcare.domain.service.IAppointmentService;
+import com.healthcare.domain.service.interfaces.IAppointmentService;
 
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;

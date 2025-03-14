@@ -16,6 +16,7 @@ import com.healthcare.domain.exceptions.NotFoundInDatabaseException;
 import com.healthcare.domain.model.entity.MedicalRecords;
 import com.healthcare.domain.model.entity.Patient;
 import com.healthcare.domain.repository.PatientRepository;
+import com.healthcare.domain.service.interfaces.IMedicalRecordsService;
 
 import lombok.RequiredArgsConstructor;
 

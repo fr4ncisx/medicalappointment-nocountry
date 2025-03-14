@@ -6,7 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import com.healthcare.domain.dto.response.UserResponse;
-import com.healthcare.domain.service.IUserService;
+import com.healthcare.domain.service.interfaces.IUserService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

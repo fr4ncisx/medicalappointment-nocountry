@@ -5,6 +5,7 @@ import com.healthcare.domain.dto.response.UserResponse;
 import com.healthcare.domain.exceptions.NotFoundInDatabaseException;
 import com.healthcare.domain.model.entity.User;
 import com.healthcare.domain.repository.UserRepository;
+import com.healthcare.domain.service.interfaces.IUserService;
 import com.healthcare.infrastructure.security.utils.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

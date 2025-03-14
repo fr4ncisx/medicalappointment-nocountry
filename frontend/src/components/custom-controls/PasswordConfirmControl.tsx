@@ -2,7 +2,7 @@ import { withJsonFormsControlProps } from "@jsonforms/react";
 import { ControlProps } from "@jsonforms/core";
 import { TextField, Box } from "@mui/material";
 
-const PasswordConfirmControl = ({ data, path, errors, handleChange }: ControlProps) => {
+const PasswordConfirmControl = ({ data, path, handleChange }: ControlProps) => {
   const password = data?.password || "";
   const repeatPassword = data?.repeatPassword || "";
 

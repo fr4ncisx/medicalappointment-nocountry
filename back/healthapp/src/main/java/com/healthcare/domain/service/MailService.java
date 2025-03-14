@@ -25,7 +25,7 @@ public class MailService {
     @Value("${email.username}")
     private String email;
 
-    public void sendMail(String[] sendTo, String subject, Appointment appointment) throws MessagingException {
+    public void sendMail(String sendTo, String subject, Appointment appointment) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         Context context = new Context();

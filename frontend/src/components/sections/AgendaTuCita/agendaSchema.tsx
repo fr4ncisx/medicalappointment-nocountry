@@ -2,59 +2,62 @@ export const agendaSchema = {
     "type": "object",
     "required": [
         "specialty",
-        "doctor",
+        "selectorMedicos",
         "time"
     ],
     "properties": {
         "specialty": {
             oneOf: [
                 {
-                    const: "Dermatologia",
-                    title: "Dermatología",
+                    const: "CLINICA",
+                    title: "CLINICA",
                 },
                 {
-                    const: "Endocrinologia",
-                    title: "Endocrinología",
+                    const: "CARDIOLOGIA",
+                    title: "CARDIOLOGIA",
                 },
                 {
-                    const: "Cardiologia",
-                    title: "Cardiología",
+                    const: "NEUROLOGIA",
+                    title: "NEUROLOGIA",
                 },
                 {
-                    const: "Neumologia",
-                    title: "Neumología",
+                    const: "PSIQUIATRIA",
+                    title: "PSIQUIATRIA",
                 },
                 {
-                    const: "Ginecologia",
-                    title: "Ginecología",
+                    const: "PSICOLOGIA",
+                    title: "PSICOLOGIA",
                 },
                 {
-                    const: "Oftalmologia",
-                    title: "Oftalmología",
+                    const: "NUTRICION",
+                    title: "NUTRICION",
+                },
+                {
+                    const: "DERMATOLOGIA",
+                    title: "DERMATOLOGIA",
+                },
+                {
+                    const: "GINECOLOGIA",
+                    title: "GINECOLOGIA",
                 },
             ],
         },
-        "doctor": {
-            oneOf: [
-                {
-                    const: "Swong",
-                    title: "SWONG, Jorge",
-                },
-                {
-                    const: "Preslie",
-                    title: "PRESLIE, Miranda",
-                },
-                {
-                    const: "Fernandez",
-                    title: "FERNANDEZ, Milagros",
-                },
-            ],
+        "selectorMedicos": {
+            "type": "object",
+            "properties": {
+                "medic": {
+                    "type": "string",
+                }
+            }
         },
         "time": {
             "type": "string",
             "errorMessage": {
                 "format": "El formato de la hora no es válido."
             }
+        },
+        "visitReason": {
+            "type": "string",
         }
     },
     "errorMessage": {
@@ -72,8 +75,11 @@ export const agendaUiSchema = {
         },
         {
             "type": "Control",
-            "scope": "#/properties/doctor",
-            "label": "Doctor",
+            "scope": "#/properties/selectorMedicos",
+            "label": "Doctor", 
+            "options": {
+                "customControl": "selectorMedicos",
+            }
         },
         {
             "type": "Control",
@@ -83,5 +89,10 @@ export const agendaUiSchema = {
                 "format": "time"
             }
         },
+        {
+            "type": "Control",
+            "scope": "#/properties/visitReason",
+            "label": "Razón de la visita"
+        }
     ]
 }

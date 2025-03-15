@@ -1,58 +1,44 @@
 import { Button, TableCell, TableRow } from "@mui/material";
 import RemoveIcon from '@mui/icons-material/Remove';
 import ScheduleIcon from '@mui/icons-material/Schedule';
+import { CitasData } from "@tipos/backendTypes";
+import { useUserStore } from "@store/user.store";
 
-const rows: Record<string, string>[] = [
-    {
-        id: "1",
-        fecha: "23/04/2025",
-        hora: "11:00HS",
-        doctor: "Gonzalez, Julio",
-    },
-    {
-        id: "2",
-        fecha: "15/03/2025",
-        hora: "10:30HS",
-        doctor: "Castillos, Martín",
-    },
-    {
-        id: "3",
-        fecha: "28/05/2025",
-        hora: "08:00HS",
-        doctor: "Sevallo, Paula"
-    },
-    {
-        id: "4",
-        fecha: "12/06/2025",
-        hora: "13:00HS",
-        doctor: "Lima, Alexia",
-    }
-];
+export const CitasRows = ({citas}: {citas: CitasData[]}) => {
+    const getToken = useUserStore(state => state.getToken);
 
-export const CitasRows = () => {
-    // TODO obtener citas de un paciente del back
-    const handleCancelar = (id: string) => {
-        // TODO eliminar paciente
+    const handleCancelar = (id: number) => {
+        const token = getToken();
+        try{
+            fetch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/appointments/cancel/${id}`, {
+                method: "PUT",
+                headers: {
+                    'Authorization': `${token}`,}})
+        } catch{
+            console.error("Error al cancelar la cita:", Error);
+        }
+        
     }
-    const handleReprogramar = (id: string) => {
+
+    const handleReprogramar = (id: number) => {
         // TODO eliminar paciente
     }
     return (
         <>
             {
-                rows.map(({ id, fecha, hora, doctor }) => (
-                    <TableRow
-                        key={id}
-                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                        <TableCell align="center">{fecha}</TableCell>
-                        <TableCell align="center">{hora}</TableCell>
-                        <TableCell align="center">{doctor}</TableCell>
-                        <TableCell align="center">
-                            <Button startIcon={<RemoveIcon />} sx={{fontSize: "0.8em", textTransform: "none", marginRight: "8px"}} variant="contained" color="error" disableElevation onClick={() => handleCancelar(id)}>Cancelar</Button>
-                            <Button startIcon={<ScheduleIcon />} sx={{fontSize: "0.8em", textTransform: "none", backgroundColor: "#FEB20E"}} variant="contained" disableElevation onClick={() => handleReprogramar(id)}>Reprogramar</Button>
-                        </TableCell>
-                    </TableRow>
+                citas.filter((cita) => cita.status !== 'CANCELADA').map(({ id, date, time, medic }) => (
+                        <TableRow
+                            key={id}
+                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        >
+                                <TableCell align="center">{date}</TableCell>
+                                <TableCell align="center">{time}</TableCell>
+                                <TableCell align="center">{medic.name} {medic.lastname}</TableCell>
+                                <TableCell align="center">
+                                    <Button startIcon={<RemoveIcon />} sx={{fontSize: "0.8em", textTransform: "none", marginRight: "8px"}} variant="contained" color="error" disableElevation onClick={() => handleCancelar(id)}>Cancelar</Button>
+                                    <Button startIcon={<ScheduleIcon />} sx={{fontSize: "0.8em", textTransform: "none", backgroundColor: "#FEB20E"}} variant="contained" disableElevation onClick={() => handleReprogramar(id)}>Reprogramar</Button>
+                                </TableCell>
+                        </TableRow>
                 ))
             }
         </>

@@ -59,7 +59,7 @@ export const MedicosDisponiblesStyles: ObjectStyles = {
     justifyContent: "center",
     border: "1px solid lightgray",
     padding: "1.5rem 1rem",
-    height: "100%",
+    height: "50%",
     transition: "all 0.2s ease",
     "&:hover": {
       backgroundColor: "#f9f9f9",

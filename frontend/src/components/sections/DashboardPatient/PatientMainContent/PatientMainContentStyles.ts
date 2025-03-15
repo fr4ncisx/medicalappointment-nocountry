@@ -2,7 +2,6 @@ import { ObjectStyles } from "@tipos/component";
 
 const TabStyles = {
     height: "100%",
-    width: "100px",
     padding: "1em",
     fontSize: "0.8em",
     backgroundColor: "#198751",
@@ -21,10 +20,12 @@ export const PatientMainContentStyles: ObjectStyles = {
     },
     startTab: {
         ...TabStyles,
+        width: "100px",
         borderTopLeftRadius: "10px"
     },
     endTab: {
         ...TabStyles,
+        width: "130px",
         borderTopRightRadius: "10px",
         "::after": {
             content: "''",

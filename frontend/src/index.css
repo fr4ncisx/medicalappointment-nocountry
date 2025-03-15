@@ -1,0 +1,33 @@
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+@font-face {
+    font-family: "Inria Sans";
+    src: url("./fonts/inria-sans-latin-400-normal.woff2") format("woff2");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "Inria Sans Bold";
+    src: url("./fonts/inria-sans-latin-700-normal.woff2") format("woff2");
+    font-weight: 700;
+}
+
+body {
+    color: #000;
+    font-family: "Inria Sans", "Roboto", 'Segoe UI', sans-serif;
+    background-color: #f1f1f1;
+}
+
+.link:hover>* {
+    color: color-mix(in srgb, #726969, #000 10%);
+}

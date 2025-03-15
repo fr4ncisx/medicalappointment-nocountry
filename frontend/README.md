@@ -1,6 +1,6 @@
 # Descripción del proyecto
 
-MedicTurn es un sistema web para solicitar turnos como paciente o consultar los turnos actuales como médico.
+Medic Appointment es un sistema web para solicitar turnos como paciente o consultar los turnos actuales como médico.
 
 ## Instalación de dependencias
 

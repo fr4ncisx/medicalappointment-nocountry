@@ -8,8 +8,8 @@
 
 Este proyecto es un sistema web diseñado para la gestión de turnos en una clínica. Permite la administración eficiente de citas médicas para distintos tipos de usuarios: Administradores, Médicos y Pacientes.
 
-- [Frontend.md](./frontend/README.MD)
-- [Backend.md](./backend/README.MD)
+- [Frontend README](./frontend/)
+- [Backend README](./back/)
 
 ## 🏥 Funcionalidades
 

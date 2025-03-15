@@ -7,10 +7,6 @@ const headers = [
     },
     {
         id: "2",
-        title: "Doctor",
-    },
-    {
-        id: "4",
         title: "Diagnóstico",
     }
 ];

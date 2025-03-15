@@ -10,11 +10,12 @@ interface FormData {
     specialty: string | null;
     doctor: string | null;
     time: string | null;
+    visitReason: string | null;
 };
 
 const FormInitialData = {
-    doctor: null,
     specialty: null,
+    selectorMedicos: null,
 };
 
 export const AgendaTuCitaSection = () => {

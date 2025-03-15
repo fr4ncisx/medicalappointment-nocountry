@@ -21,10 +21,10 @@ export const PatientMainContent = () => {
             <Box sx={{ display: "flex", justifyContent: "space-between", marginTop: "3rem" }}>
                 <Box sx={PatientMainContentStyles.tabContainer}>
                     <Button sx={{ ...PatientMainContentStyles.startTab, color: tab === "citas" ? "#f1f1f1" : "#c1c1c1" }} onClick={() => handleTab("citas")}>
-                        Pacientes
+                        Citas
                     </Button>
-                    <Button sx={{ ...PatientMainContentStyles.endTab, color: tab === "historial-medico" ? "#f1f1f1" : "#c1c1c1" }} onClick={() => handleTab("historial-medico")}>
-                        Medicos
+                    <Button sx={{ ...PatientMainContentStyles.endTab, color: tab === "historial-medico" ? "#f1f1f1" : "#c1c1c1"}} onClick={() => handleTab("historial-medico")}>
+                        Historial médico
                     </Button>
                 </Box>
 

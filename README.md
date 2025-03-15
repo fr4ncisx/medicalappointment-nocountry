@@ -1,7 +1,7 @@
 <div style="text-align: center;">
   <img src="https://img.shields.io/badge/status-in%20development-yellow" alt="Status">
-  <img src="https://img.shields.io/badge/Versión-1.0-blue" alt="Versión">
-  <img src="https://img.shields.io/github/last-commit/fr4ncisx/NoCountry-MedicalAppointment" alt="Last commit">
+  <img src="https://img.shields.io/badge/Versión-1.0b-blue" alt="Versión">
+  <img src="https://img.shields.io/github/last-commit/fr4ncisx/medicalappointment-nocountry" alt="Last commit">
 </div>
 
 # Sistema de Administración de Turnos para Clínica
@@ -80,9 +80,9 @@ Este proyecto es un sistema web diseñado para la gestión de turnos en una clí
 
 ## 📊 GitHub Stats
 <div style="text-align: left;">
-  <img src="https://img.shields.io/github/forks/No-Country-simulation/c24-42-t-webapp" alt="Forks"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://img.shields.io/github/stars/No-Country-simulation/c24-42-t-webapp" alt="Stars"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://img.shields.io/github/issues/No-Country-simulation/c24-42-t-webapp" alt="Issues">
+  <img src="https://img.shields.io/github/forks/fr4ncisx/medicalappointment-nocountry" alt="Forks"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://img.shields.io/github/stars/fr4ncisx/medicalappointment-nocountry" alt="Stars"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://img.shields.io/github/issues/fr4ncisx/medicalappointment-nocountry" alt="Issues">
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://img.shields.io/github/contributors/No-Country-simulation/c24-42-t-webapp" alt="Contributors">
+  <img src="https://img.shields.io/github/contributors/fr4ncisx/medicalappointment-nocountry" alt="Contributors">
 </div>

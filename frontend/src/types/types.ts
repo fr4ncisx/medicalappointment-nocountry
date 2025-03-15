@@ -1,4 +1,6 @@
 import { ReactNode } from "react";
+import { PacienteData } from "./backendTypes";
+import { UserRole } from "./store";
 
 export type Image = {
   src: string;
@@ -31,9 +33,22 @@ export interface Doctor {
 export type HexColor = `#${string}`;
 
 interface ErrorData {
-    description: string,
-    type: "fetch" | "input",
-    status?: string
+  description: string,
+  type: "fetch" | "input",
+  status?: string
 }
 
 export type CustomError = ErrorData | null;
+
+export interface PacientesResponse {
+  patients: PacienteData[]
+}
+
+export interface JwtData {
+  iss: string,
+  sub: string,
+  iat: number,
+  exp: number,
+  role: UserRole
+  jti: string
+}

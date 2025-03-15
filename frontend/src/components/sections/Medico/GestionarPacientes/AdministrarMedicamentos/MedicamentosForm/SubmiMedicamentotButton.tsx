@@ -1,23 +1,23 @@
 import { CircularProgress, Typography } from "@mui/material";
-import { CustomButton } from "@ui/CustomButton/CustomButton";
 import { CustomError } from "@tipos/types";
+import { CustomButton } from "@ui/CustomButton/CustomButton";
 
 interface Props {
     loading: boolean
     error: CustomError
-    handleLogin: () => Promise<void>
+    onSubmit: () => Promise<void>
 }
 
-export const LoginButton = ({ error, loading, handleLogin }: Props) => {
+export const SubmitMedicamentoButton = ({ error, loading, onSubmit }: Props) => {
     return (
-        <CustomButton type="submit" onClick={handleLogin} disabled={error !== null && error?.type === "input"}>
+        <CustomButton type="submit" onClick={onSubmit} disabled={error !== null && error?.type === "input"} fullWidth>
             {
                 loading
                     ?
                     <CircularProgress color="inherit" size="25px" />
                     :
                     <Typography textTransform="none" fontSize="18px">
-                        Iniciar Sesión
+                        Agregar Medicamento
                     </Typography>
             }
         </CustomButton>

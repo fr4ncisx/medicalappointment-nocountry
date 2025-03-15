@@ -49,3 +49,13 @@ export interface CitasPasadasData {
     treatment: string;
     doctorNotes: string;
 }
+
+export interface MedicacionData {
+    id:             number;
+    medicationName: string;
+    dosage:         string;
+    frequency:      string;
+    startDate:      Date;
+    endDate:        Date;
+    notes:          string;
+}

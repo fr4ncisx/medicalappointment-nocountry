@@ -30,7 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        if (hasTokenAuthorization(request)) {
+        if (tokenNotPresent(request)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -47,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-    private boolean hasTokenAuthorization(HttpServletRequest request) {
+    private boolean tokenNotPresent(HttpServletRequest request) {
         return request.getHeader(AUTHORIZATION) == null || request.getHeader(AUTHORIZATION).isBlank();
     }
     private String getTokenFromHeader(@NotNull HttpServletRequest request){

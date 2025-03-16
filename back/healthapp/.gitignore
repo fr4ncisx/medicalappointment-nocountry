@@ -37,3 +37,4 @@ build/
 
 ## Docker
 docker-compose.yml
+docker_init.ps1

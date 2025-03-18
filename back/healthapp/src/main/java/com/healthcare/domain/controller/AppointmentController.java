@@ -47,4 +47,10 @@ public class AppointmentController {
     public ResponseEntity<?> getAppointmentsByPatient(@PathVariable Long patientId) {
         return appointmentService.getAppointmentsByPatient(patientId);
     }
+
+    @PreAuthorize("hasAnyRole({'ADMIN','MEDICO'})")
+    @GetMapping("/{medicId}")
+    public ResponseEntity<?> getAppointmentsByMedic(@PathVariable Long medicId) {
+        return appointmentService.getAppointmentsByMedic(medicId);
+    }
 }

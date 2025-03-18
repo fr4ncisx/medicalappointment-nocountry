@@ -93,6 +93,18 @@ public class AppointmentServiceImpl implements IAppointmentService {
         return ResponseEntity.ok(Map.of(MESSAGE, "Lista de citas médicas", APPOINTMENTS, response));
     }
 
+    @Override
+    public ResponseEntity<?> getAppointmentsByMedic(Long medicId) {
+        var appointments = appointmentRepository.findByMedicIdAndStatusOrderByDateAscTimeAsc(medicId, Status.CONFIRMADA);
+        if(appointments.isEmpty()){
+            throw new IllegalArgumentException("There are not appointments");
+        }
+        var response = appointments.stream()
+                .map(a -> modelMapper.map(a, AppointmentListResponse.class))
+                .toList();
+        return ResponseEntity.ok(response);
+    }
+
     private List<Appointment> getListOfAppointments(Long patientId) {
         return appointmentRepository.findByPatientId(patientId);
     }

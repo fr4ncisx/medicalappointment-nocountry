@@ -11,7 +11,7 @@ services:
     ports: 
       - "8080:8080"
     environment:
-      DB_URL: jdbc:mysql://mysql/healthapp
+      DB_URL: jdbc:mysql://mysql:3306/healthapp?serverTimezone=UTC
       MYSQL_USER: root
       MYSQL_PASSWORD: ## INSERT FROM READ BELOW MYSQL_ROOT_PASSWORD
       HIBERNATE_DDL: update

@@ -7,7 +7,7 @@
 services:
   healthapp:
     container_name: springboot
-    image: dockerfrancisx/healthapp:v1.21 ## USE MOST RECENT VERSION! https://hub.docker.com/r/dockerfrancisx/healthapp/tags
+    image: dockerfrancisx/healthapp:v1.25-SNAPSHOT ## USE MOST RECENT VERSION! https://hub.docker.com/r/dockerfrancisx/healthapp/tags
     ports: 
       - "8080:8080"
     environment:
@@ -29,6 +29,7 @@ services:
       ADMIN_PASSWORD: ## ADMIN PASSWORD
       SMTP_EMAIL: ## AN EMAIL FOR SENDING EMAILS
       SMTP_PASSWORD: ## SMTP APPLICATION PASSWORD (NOT LOGIN PASSWORD)
+      ACTIVATE_SENDING_EMAIL: ## TRUE OR FALSE SENDING EMAILS
     restart: always
     depends_on:
       - mysql

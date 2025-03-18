@@ -5,8 +5,10 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.UUID;
 
+import com.healthcare.domain.exceptions.InvalidDataException;
 import com.healthcare.domain.exceptions.NotFoundInDatabaseException;
 import com.healthcare.domain.model.entity.User;
+import com.healthcare.domain.model.enums.Role;
 import com.healthcare.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,13 +44,16 @@ public class JwtUtils {
 
 
     public String createToken(UserAuthenticated user) {
+        var userRole = user.getRole();
+        var userEmail = user.getEmail();
         return JWT.create()
                 .withIssuer(appIssuer)
-                .withSubject(user.getEmail())
+                .withSubject(userEmail)
                 .withIssuedAt(generateTimestamp(false))
                 .withExpiresAt(generateTimestamp(true))
-                .withClaim("role", user.getRole().toString())
+                .withClaim("role", userRole.toString())
                 .withJWTId(generateRandomUUID())
+                .withClaim(claimIdRole(userRole), getId(userEmail, userRole))
                 .sign(getAlgorithm());
     }
 
@@ -89,6 +94,22 @@ public class JwtUtils {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         securityContext.setAuthentication(auth);
+    }
+
+    private Long getId(String email, Role role){
+        var u = userRepository.findByEmail(email).orElseThrow(() -> new InvalidDataException("Usuario no encontrado, getId"));
+        return switch (role) {
+            case Role.MEDICO ->  u.getMedic().getId();
+            case Role.PACIENTE ->  u.getPatient().getId();
+            case Role.ADMIN -> u.getAdmin().getId();
+        };
+    }
+    private String claimIdRole(Role role){
+        return switch (role){
+            case Role.MEDICO -> "medicId";
+            case Role.PACIENTE -> "patientId";
+            case Role.ADMIN -> "adminId";
+        };
     }
 
     private String generateRandomUUID() {

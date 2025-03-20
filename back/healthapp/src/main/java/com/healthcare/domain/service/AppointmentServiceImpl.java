@@ -1,6 +1,7 @@
 package com.healthcare.domain.service;
 
 import com.healthcare.domain.dto.request.AppointmentRequest;
+import com.healthcare.domain.dto.request.RabbitRequest;
 import com.healthcare.domain.dto.response.AppointmentListResponse;
 import com.healthcare.domain.dto.response.AppointmentResponse;
 import com.healthcare.domain.exceptions.*;
@@ -38,6 +39,7 @@ public class AppointmentServiceImpl implements IAppointmentService {
     private final ScheduleRepository scheduleRepository;
     private final ModelMapper modelMapper;
     private final MailService mailService;
+    private final NotificationService notificationService;
 
     @Value("${email.sendEmail}")
     private boolean sendEmail;
@@ -53,7 +55,8 @@ public class AppointmentServiceImpl implements IAppointmentService {
         isTimeTaken(medic, appointmentRequest);
         outOfTimeRangeValidation(medicId, appointmentRequest.getDate(), appointmentRequest.getTime());
         Appointment appointment = new Appointment(appointmentRequest, medic, patient);
-        appointmentRepository.save(appointment);
+        //appointmentRepository.save(appointment);
+        notificationService.sendNotification(new RabbitRequest(medic.getUser().getId(), "New appointment arrived!"));
         if (sendEmail) {
             mailService.sendMail(patient.getUser().getEmail(), "Cita Médica: Confirmación", appointment);
         }

@@ -24,8 +24,6 @@ public class NotificationListener {
         String payload = new String(message.getBody());
         String routingKey = message.getMessageProperties().getReceivedRoutingKey();
         String userId = routingKey.split("\\.")[2];
-        System.out.println(userId + "/notifications" + payload);
-        System.out.println("Mensaje recibido en RabbitListener: " + payload);
         messagingTemplate.convertAndSendToUser(userId, "/notifications", payload);
     }
 

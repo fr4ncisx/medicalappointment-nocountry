@@ -148,10 +148,17 @@ export interface MedicoInput {
 }
 
 export interface AppointmentResponse {
-    date:        Date;
-    time:        Time;
-    visitReason: string;
+    date: string,
+    time: string,
+    visitReason: string,
 }
+
+export interface AgendarCitaInput {
+    specialty: string,
+    selectorMedicos: { medic: string },
+    time: string,
+    visitReason: string,
+};
 
 export interface Time {
     hour:   number;

@@ -4,7 +4,7 @@ import { SignUpFormData, signUpSchema, signUpUiSchema } from "./signUpSchema";
 import { useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { FormStyle } from "./SignUpStyles";
-import { signUpUser } from "@services/signUpUser";
+import { signUpUser } from "@services/user/signUpUser";
 import { CustomError } from "@tipos/types";
 import { showSonnerToast } from "@utils/showSonnerToast";
 import { useModalStore } from "@store/modal.store";

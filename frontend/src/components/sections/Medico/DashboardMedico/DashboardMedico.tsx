@@ -3,7 +3,7 @@ import { DashboardMedicoContent } from "./DashboardMedicoContent";
 import { MEDIC_LINKS } from "../MEDIC_LINKS";
 import { SectionWrapper } from "@components/layout/SectionWrapper";
 import { useUserStore } from "@store/user.store";
-import { getMedicAppointments } from "@services/getMedicAppointments";
+import { getMedicAppointments } from "@services/medic/getMedicAppointments";
 
 export const DashboardMedico = () => {
     const idUser = useUserStore(state => state.userData?.id);

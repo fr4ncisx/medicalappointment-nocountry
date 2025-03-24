@@ -6,7 +6,7 @@ import { MedicoFormData, medicoFormSchema, medicoFormUiSchema } from "./medicoFo
 import { Box, Typography } from "@mui/material";
 import { SubmitButton } from "@ui/SubmitButton/SubmitButton";
 import { useModalStore } from "@store/modal.store";
-import { createMedico } from "@services/createMedico";
+import { createMedico } from "@services/medic/createMedico";
 import { showSonnerToast } from "@utils/showSonnerToast";
 import { useUserStore } from "@store/user.store";
 import { useTableContext } from "@context/table.context";

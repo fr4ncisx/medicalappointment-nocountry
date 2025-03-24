@@ -1,5 +1,5 @@
 import { TableContextProvider } from "@context/table.provider";
-import { getMedicos } from "@services/getMedicos";
+import { getMedicos } from "@services/medic/getMedicos";
 import { MedicoContent } from "./MedicoContent";
 import { Box } from "@mui/material";
 import { TabsAdmin } from "@tipos/component";

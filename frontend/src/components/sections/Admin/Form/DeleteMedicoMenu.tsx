@@ -1,5 +1,5 @@
 import { useTableContext } from "@context/table.context";
-import { deleteMedico } from "@services/deleteMedico";
+import { deleteMedico } from "@services/medic/deleteMedico";
 import { useModalStore } from "@store/modal.store";
 import { useUserStore } from "@store/user.store";
 import { CustomError } from "@tipos/types";

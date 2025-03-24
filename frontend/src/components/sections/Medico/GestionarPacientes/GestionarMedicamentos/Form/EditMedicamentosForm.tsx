@@ -9,7 +9,7 @@ import { useState } from "react";
 import { MedicamentosFormData, medicamentosSchema, medicamentosUiSchema } from "./medicamentosFormSchema";
 import { Form } from "@ui/Form/Form";
 import { CustomError } from "@tipos/types";
-import { editMedication } from "@services/editMedication";
+import { editMedication } from "@services/medication/editMedication";
 import { useParams } from "react-router";
 import { formatDate } from "@utils/date/formatDate";
 

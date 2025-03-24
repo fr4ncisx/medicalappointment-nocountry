@@ -1,6 +1,6 @@
 import { SectionWrapper } from "@components/layout/SectionWrapper";
 import { TableContextProvider } from "@context/table.provider";
-import { getMedicamentos } from "@services/getMedicamentos";
+import { getMedicamentos } from "@services/medication/getMedicamentos";
 import { MEDIC_LINKS } from "../../MEDIC_LINKS";
 import { GestionarMedicamentosContent } from "./GestionarMedicamentosContent";
 import { useParams } from "react-router";

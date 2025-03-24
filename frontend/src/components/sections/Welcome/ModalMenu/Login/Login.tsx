@@ -5,7 +5,7 @@ import { Form } from "@ui/Form/Form";
 import { LoginFormData, loginSchema, loginUiSchema } from "./loginSchema";
 import { FormStyle } from "./LoginStyles";
 import { useState } from "react";
-import { loginUser } from "@services/loginUser";
+import { loginUser } from "@services/user/loginUser";
 import { useNavigate } from "react-router";
 import { useUserStore } from "@store/user.store";
 import { useModalStore } from "@store/modal.store";

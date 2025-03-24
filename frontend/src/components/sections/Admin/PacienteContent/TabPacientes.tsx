@@ -1,6 +1,6 @@
 import { TableContextProvider } from "@context/table.provider";
 import { PacienteContent } from "./PacienteContent";
-import { getPacientes } from "@services/getPacientes";
+import { getPacientes } from "@services/patient/getPacientes";
 import { Box } from "@mui/material";
 import { TabsAdmin } from "@tipos/component";
 import { CustomButton } from "@ui/CustomButton/CustomButton";

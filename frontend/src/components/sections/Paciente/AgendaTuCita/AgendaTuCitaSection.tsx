@@ -8,7 +8,7 @@ import { agendaSchema, agendaUiSchema } from "./agendaSchema";
 import { CustomError } from "@tipos/types";
 import { useUserStore } from "@store/user.store";
 import { AgendarCitaInput } from "@tipos/backendTypes";
-import { addAppointment } from "@services/addAppointment";
+import { addAppointment } from "@services/patient/addAppointment";
 
 const FormInitialData = {
     specialty: "",

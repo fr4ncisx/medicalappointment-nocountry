@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Form } from "@ui/Form/Form";
 import { MedicamentosFormData, medicamentosSchema, medicamentosUiSchema } from "./medicamentosFormSchema";
 import { SubmitButton } from "@ui/SubmitButton/SubmitButton";
-import { addMedication } from "@services/addMedication";
+import { addMedication } from "@services/medication/addMedication";
 import { useUserStore } from "@store/user.store";
 import { useModalStore } from "@store/modal.store";
 import { showSonnerToast } from "@utils/showSonnerToast";

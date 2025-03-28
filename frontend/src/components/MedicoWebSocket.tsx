@@ -9,22 +9,21 @@ export const MedicoWebSocket = () => {
 
     const brokerURL = "ws://localhost:8080/ws";
     const userChannel = `/user/${id}/notifications`;
-    const client = new Client({
-        brokerURL,
-        onConnect: () => {
-            client.subscribe(userChannel, message => {
-                const quote = JSON.parse(message.body);
-                setIsConnected(true);
-                console.log(`Mensaje Recibido: ${quote}`)
-            });
-            client.onStompError = function (frame) {
-                console.log('Ocurrio un error: ' + frame.headers['message']);
-                console.log('Detalles del error: ' + frame.body);
-            };
-        },
-    });
-
     useEffect(() => {
+        const client = new Client({
+            brokerURL,
+            onConnect: () => {
+                client.subscribe(userChannel, message => {
+                    const quote = JSON.parse(message.body);
+                    setIsConnected(true);
+                    console.log(`Mensaje Recibido: ${quote}`)
+                });
+                client.onStompError = function (frame) {
+                    console.log('Ocurrio un error: ' + frame.headers['message']);
+                    console.log('Detalles del error: ' + frame.body);
+                };
+            },
+        });
         client.activate();
         return () => {
             client.deactivate();

@@ -17,6 +17,7 @@ import { HistorialMedico } from "@components/sections/Medico/HistorialMedico/His
 import { GestionarAgenda } from "@components/sections/Medico/GestionarAgenda/GestionarAgenda";
 import { GestionarMedicamentos } from "@components/sections/Medico/GestionarPacientes/GestionarMedicamentos/GestionarMedicamentos";
 import { DashboardAdmin } from "@components/sections/Admin/DashboardAdmin";
+import { MedicoWebSocket } from "@components/MedicoWebSocket";
 
 export const AppRouter = () => {
     return (
@@ -39,6 +40,7 @@ export const AppRouter = () => {
                         <Route path="/admin/dashboard" element={<DashboardAdmin />} />
                     </Route>
                     <Route element={<MedicoGuard />}>
+                        <Route path="/medico/websocket" element={<MedicoWebSocket />} />
                         <Route path="/medico/dashboard" element={<DashboardMedico />} />
                         <Route path="/medico/historial-citas" element={<HistorialMedico />} />
                         <Route path="/medico/gestionar-pacientes" element={<GestionarPacientes />} />
